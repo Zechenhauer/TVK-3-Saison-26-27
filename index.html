@@ -132,7 +132,8 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .liga-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; background: var(--card-bg); border-radius: 8px; overflow: hidden; }
 .liga-table th { background: rgba(255,255,255,0.03); font-family: 'Poppins'; font-weight: bold; color: var(--gold); text-transform: uppercase; font-size: 11px; padding: 12px 10px; text-align: left; border-bottom: 2px solid var(--gold-dim); }
 .liga-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-main); }
-.liga-table tr.own-team { background: rgba(212, 175, 55, 0.12); font-weight: bold; border-left: 4px solid var(--gold); }
+/* Hervorhebung für TV Kapellen 3 */
+.liga-table tr.own-team { background: rgba(212, 175, 55, 0.25); font-weight: bold; border-left: 4px solid var(--gold); }
 .liga-table tr.own-team td { color: var(--white); }
 
 /* MISSION TILES */
@@ -449,8 +450,8 @@ function renderLigaTable(ligaData, container) {
     ligaData.forEach(row => {
         const tr = document.createElement('tr');
         
-        // Euer Team wird gold markiert!
-        if (row.team.includes('TV Kapellen 1919 e.V. 3')) {
+        // Exakte Übereinstimmung mit dem Mannschaftsnamen in der Google Tabelle
+        if (row.team.trim() === 'TV Kapellen 3') {
             tr.className = 'own-team';
         }
 
