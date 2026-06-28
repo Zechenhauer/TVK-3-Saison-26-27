@@ -325,6 +325,23 @@ function renderDashboard(matches, container) {
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
+        // Standardmäßig zeigen wir Buttons
+        let actionContent = `
+            <div class="action-row">
+                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
+                <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
+            </div>
+        `;
+
+        // Bei eingetragenem Ergebnis in Spalte H: Zeige Ergebnis-Banner statt Buttons
+        if (m.ergebnis && m.ergebnis !== "") {
+            actionContent = `
+                <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; font-family: 'Poppins'; color: var(--white); letter-spacing: 1px;">
+                    ENDERGEBNIS: <span style="color: var(--gold); font-size: 16px; margin-left: 5px;">${m.ergebnis}</span>
+                </div>
+            `;
+        }
+
         card.innerHTML = `
             <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
             <h4>Spieltag ${m.id}</h4>
@@ -334,10 +351,7 @@ function renderDashboard(matches, container) {
                 <span class="status-yes"><strong>Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Keine Zusagen</i>'}</span>
                 <span class="status-no"><strong>Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine Absagen</i>'}</span>
             </div>
-            <div class="action-row">
-                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
-                <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
-            </div>
+            ${actionContent}
         `;
         container.appendChild(card);
     });
