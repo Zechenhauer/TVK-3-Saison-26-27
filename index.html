@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Kapellen 3 - Saison 2026/27</title>
+    <title>TV Kapellen 3 - Squad App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-/* 1. CORE THEME & RESET */
+/* 1. GLOBAL THEME & RESPONSIVE SETUP */
 :root {
-  --navy: #001f3f;
+  --navy: #050a14;
   --gold: #D4AF37;
-  --gold-light: #f1e4b8;
+  --gold-dim: rgba(212, 175, 55, 0.1);
   --white: #ffffff;
-  --bg-dark: #050a14;
   --card-bg: #0c1626;
   --accent-blue: #0074D9;
   --text-main: #e2e8f0;
@@ -27,102 +26,161 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background-color: #1a1a1a;
-  display: grid;
-  gap: 40px;
-  place-items: center;
-  padding: 40px 0;
+  background-color: #000;
+  color: var(--text-main);
   font-family: 'Lato', sans-serif;
+  line-height: 1.5;
 }
 
+/* Slide Container: Fixed on Desktop, Fluid on Mobile */
 .slide-container {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  width: 1280px;
-  height: 720px;
-  overflow: hidden;
+  background-color: var(--navy);
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 60px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-  border: 1px solid rgba(212, 175, 55, 0.1);
+  margin: 0 auto 20px auto;
+  padding: 40px 20px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gold-dim);
 }
 
+/* Responsive Scaling */
+@media (min-width: 1281px) {
+  body { padding: 40px 0; }
+  .slide-container {
+    width: 1280px;
+    height: 720px;
+    padding: 60px;
+    border-radius: 8px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    border: 1px solid var(--gold-dim);
+    margin-bottom: 40px;
+  }
+}
+
+/* DECORATIVE BACKGROUNDS */
 .slide-container::before {
   content: '';
   position: absolute;
-  top: -200px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(0, 116, 217, 0.08) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 116, 217, 0.1) 0%, transparent 70%);
   z-index: 0;
 }
 
 .slide-container > * { position: relative; z-index: 1; }
 
+/* TYPOGRAPHY */
 h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
-h1 { font-size: 84px; line-height: 1.1; margin-bottom: 10px; }
-.slide-title { font-size: 36px; font-weight: 400; margin-bottom: 40px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
-p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
+h1 { font-size: clamp(40px, 8vw, 84px); line-height: 1.1; margin-bottom: 15px; }
+.slide-title { 
+  font-size: clamp(24px, 5vw, 36px); 
+  margin-bottom: 30px; 
+  border-left: 5px solid var(--gold); 
+  padding-left: 15px; 
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+}
+p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 
-.title-layout { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
-.title-layout span { color: var(--gold); }
+/* DASHBOARD GRID - Untereinander auf Mobilgeräten, 3 Spalten am PC */
+.app-grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 15px; 
+}
 
-.content-area { flex-grow: 1; width: 100%; }
+@media (min-width: 768px) {
+  .app-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
-/* AREA CHART TREND (FULL SLIDE) */
-.area-chart-container { width: 100%; height: 400px; margin-top: 20px; position: relative; }
-.area-chart-svg { width: 100%; height: 100%; overflow: visible; }
-.area-fill { fill: rgba(0, 116, 217, 0.15); transition: all 0.5s ease; }
-.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; transition: all 0.5s ease; }
-.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 2; }
-.chart-value-text { fill: var(--white); font-size: 14px; font-weight: bold; text-anchor: middle; }
+@media (min-width: 1281px) {
+  .app-grid { grid-template-columns: repeat(3, 1fr); height: 500px; overflow-y: auto; padding-right: 10px; }
+  .app-grid::-webkit-scrollbar { width: 6px; }
+  .app-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+}
 
-/* APP GRID (DASHBOARD) */
-.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 500px; overflow-y: auto; padding-right: 10px; }
-.app-grid::-webkit-scrollbar { width: 6px; }
-.app-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 20px; position: relative; }
+/* MATCH CARDS */
+.match-card { 
+  background: var(--card-bg); 
+  border: 1px solid var(--gold-dim); 
+  border-radius: 12px; 
+  padding: 20px; 
+  position: relative; 
+}
 
-/* Heim / Auswärts Badge */
-.game-loc-badge { position: absolute; top: 20px; right: 20px; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+.game-loc-badge { 
+  position: absolute; top: 15px; right: 15px; 
+  padding: 3px 8px; font-size: 10px; font-weight: bold; border-radius: 4px; text-transform: uppercase; 
+}
 .loc-h { background: rgba(0, 116, 217, 0.2); color: #0074D9; border: 1px solid #0074D9; }
 .loc-a { background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
 
-.match-card h4 { font-size: 12px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
-.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 60px; }
-.match-card .match-date { font-size: 13px; color: var(--gold); margin-bottom: 15px; font-weight: bold; }
-.match-status { font-size: 12px; margin-bottom: 15px; }
-.match-status strong { display: block; color: var(--white); margin-bottom: 2px; }
-.status-yes { color: var(--zusage); }
-.status-no { color: var(--absage); }
-.action-row { display: flex; gap: 10px; }
-.app-btn { flex: 1; padding: 8px; border: 1px solid #333; border-radius: 4px; background: transparent; color: white; cursor: pointer; font-size: 11px; font-weight: 700; transition: 0.2s; text-transform: uppercase; }
-.app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: black; }
-.app-btn.active-no { background: var(--absage); border-color: var(--absage); color: white; }
+.match-card h4 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+.match-card .match-title { font-size: 1.2rem; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 40px; }
+.match-card .match-date { font-size: 13px; color: var(--gold); margin-bottom: 15px; }
 
-.captain-badge { background: var(--gold); color: #000; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 3px; margin-left: 4px; display: inline-block; }
+.match-status { font-size: 13px; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+.match-status strong { display: block; color: var(--white); margin-bottom: 2px; font-size: 12px; }
+.status-yes { color: var(--zusage); margin-bottom: 8px; display: block; }
+.status-no { color: var(--absage); display: block; }
+
+.action-row { display: flex; gap: 10px; }
+.app-btn { 
+  flex: 1; padding: 12px; border: 1px solid #333; border-radius: 6px; 
+  background: transparent; color: white; cursor: pointer; font-size: 12px; 
+  font-weight: 700; text-transform: uppercase; 
+}
+.app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: #000; }
+.app-btn.active-no { background: var(--absage); border-color: var(--absage); color: #fff; }
+
+/* MISSION TILES - Erzwingt Stapeln untereinander auf Mobilgeräten */
+.tiled-content { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+}
+@media (min-width: 1281px) { 
+  .tiled-content { flex-direction: row; } 
+}
+
+.tile { background: var(--card-bg); padding: 30px; border-radius: 8px; border-top: 4px solid var(--gold); flex: 1; }
+.tile i { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
+
+/* PERFORMANCE CHART */
+.area-chart-container { 
+  width: 100%; height: 250px; margin-top: 20px; 
+  background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; 
+}
+@media (min-width: 1281px) { .area-chart-container { height: 400px; } }
+.area-chart-svg { width: 100%; height: 100%; overflow: visible; }
+.area-fill { fill: rgba(0, 116, 217, 0.15); }
+.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 3; }
+.chart-dot { fill: var(--gold); stroke: #fff; stroke-width: 1.5; }
+.chart-value-text { fill: #fff; font-size: 10px; font-weight: bold; text-anchor: middle; }
+
+/* CAPTAIN HIGHLIGHT */
+.captain-badge { background: var(--gold); color: #000; padding: 1px 4px; font-size: 9px; font-weight: bold; border-radius: 2px; vertical-align: middle; }
 .captain-highlight { color: var(--gold) !important; font-weight: bold; }
 
-#onboarding { position: absolute; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-.onboard-card { background: var(--card-bg); padding: 50px; border-radius: 12px; border: 1px solid var(--gold); width: 450px; text-align: center; }
-.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 4px; margin: 20px 0; font-size: 16px; }
+/* LOGIN ONBOARDING */
+#onboarding { position: fixed; inset: 0; background: var(--navy); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+.onboard-card { background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--gold); width: 100%; max-width: 400px; text-align: center; }
+.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 20px 0; font-size: 16px; }
 
-.tiled-content { display: flex; gap: 30px; width: 100%; height: 100%; }
-.tile { background: var(--card-bg); padding: 40px; border-radius: 4px; border-top: 4px solid var(--gold); flex: 1; display: flex; flex-direction: column; gap: 15px; }
-.tile i { font-size: 48px; color: var(--gold); }
-.tile h3 { font-size: 24px; color: var(--white); }
+/* DATE FORMAT CLEANUP */
+.match-date i { margin-right: 5px; color: var(--gold); }
     </style>
 </head>
 <body>
 
 <div class="slide-container" id="slide1">
     <div class="title-layout">
-        <p style="color: var(--gold); letter-spacing: 5px; font-weight: 700;">PREMIUM MANAGEMENT</p>
-        <h1>TV Kapellen 3<br><span>Saison 2026/27</span></h1>
-        <p style="max-width: 600px;">Strategische Planung, digitale Kaderverwaltung und Performance-Tracking für die kommende Spielzeit.</p>
+        <p style="color: var(--gold); letter-spacing: 3px; font-weight: 700; font-size: 14px;">PREMIUM SQUAD MANAGEMENT</p>
+        <h1>TV Kapellen 3<br><span style="color:var(--gold)">Saison 2026/27</span></h1>
+        <p style="max-width: 600px; margin-top: 20px;">Die digitale Zentrale für Kaderplanung, Spieltage und Performance-Tracking.</p>
     </div>
 </div>
 
@@ -133,17 +191,17 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
             <div class="tile">
                 <i class="fa-solid fa-bullseye"></i>
                 <h3>Präzision</h3>
-                <p>Steigerung des Team-Averages um 15% durch systematisches Doppel-Training und Mentaltraining.</p>
+                <p>Steigerung des Team-Averages durch systematisches Doppel-Training.</p>
             </div>
             <div class="tile">
                 <i class="fa-solid fa-shield-halved"></i>
                 <h3>Klassenerhalt</h3>
-                <p>Sicherung der Liga durch konstante Kaderverfügbarkeit, strategische Aufstellungen und Fokus bei engen Matches.</p>
+                <p>Sicherung der Liga durch konstante Kaderverfügbarkeit.</p>
             </div>
             <div class="tile">
                 <i class="fa-solid fa-handshake"></i>
                 <h3>Teamgeist</h3>
-                <p>An den Spieltagen zählt nicht der einzelne Pfeil, sondern der gemeinsame Fokus. Nur mit echtem Teamspirit holen wir am Board die entscheidenden Punkte!</p>
+                <p>Nur mit echtem Teamspirit holen wir am Board die entscheidenden Punkte!</p>
             </div>
         </div>
     </div>
@@ -152,9 +210,9 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 <div class="slide-container" id="slide3">
     <div id="onboarding">
         <div class="onboard-card">
-            <i class="fa-solid fa-id-badge" style="font-size: 50px; color: var(--gold);"></i>
-            <h2 style="margin-top: 15px;">Login Required</h2>
-            <p>Bitte wähle dein Profil aus der Kaderliste 26/27.</p>
+            <i class="fa-solid fa-id-badge" style="font-size: 40px; color: var(--gold);"></i>
+            <h2 style="margin-top: 15px; font-size: 24px;">Login</h2>
+            <p>Wähle dein Profil für 26/27</p>
             <select id="player-select">
                 <option value="" disabled selected>Identität wählen...</option>
                 <option value="Jürgen Schützendorf (TC 1)">Jürgen Schützendorf (TC 1)</option>
@@ -168,62 +226,62 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
                 <option value="Dominik Helmke">Dominik Helmke</option>
                 <option value="Michael Müller">Michael Müller</option>
             </select>
-            <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">ZUGANG FREISCHALTEN</button>
+            <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">Freischalten</button>
         </div>
     </div>
 
-    <h2 class="slide-title">Squad-Dashboard 2026/27</h2>
+    <h2 class="slide-title">Squad-Dashboard</h2>
     <div class="content-area">
         <div id="match-grid" class="app-grid">
-            <p style="text-align:center; padding-top:50px;">Verbinde mit Google Sheets...</p>
+            <p style="text-align:center; padding-top:20px;">Lade Spieldaten...</p>
         </div>
-        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; display: flex; justify-content: space-between;">
-            <span id="active-user" style="color: var(--gold); font-weight: 700;"></span>
-            <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer;">Profil wechseln</button>
+        <div style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <span id="active-user" style="color: var(--gold); font-weight: 700; font-size: 14px;"></span>
+            <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 12px;">Profil wechseln</button>
         </div>
     </div>
 </div>
 
 <div class="slide-container" id="slide4">
-    <h2 class="slide-title">Performance Trend Analyse</h2>
+    <h2 class="slide-title">Performance Trend</h2>
     <div class="content-area">
-        <p>Tatsächliche Entwicklung des Team-Averages im Saisonverlauf (Live aus Google Sheets).</p>
+        <p style="margin-bottom: 10px;">Live Team-Average Entwicklung:</p>
         <div class="area-chart-container">
-            <svg class="area-chart-svg" viewBox="0 0 1160 400" id="performance-svg">
-                <text x="580" y="200" fill="var(--text-dim)" text-anchor="middle">Warte auf Daten...</text>
+            <svg class="area-chart-svg" viewBox="0 0 1000 300" id="performance-svg">
+                <text x="500" y="150" fill="var(--text-dim)" text-anchor="middle">Warte auf Daten...</text>
             </svg>
         </div>
     </div>
 </div>
 
-<div class="slide-container" id="slide5">
-    <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 100%;">
-        <div style="text-align: center; max-width: 800px;">
-            <i class="fa-solid fa-quote-left" style="font-size: 60px; color: var(--gold); margin-bottom: 30px;"></i>
-            <h2 style="font-size: 48px; line-height: 1.2; font-weight: 400; font-style: italic;">"Erfolg ist kein Zufall. Es ist Vorbereitung, harte Arbeit und das Wissen, dass das Team hinter einem steht."</h2>
-            <p style="margin-top: 20px; letter-spacing: 3px; color: var(--gold);">TV KAPELLEN 3 | 2026/27</p>
+<div class="slide-container" id="slide5" style="justify-content: center; text-align: center;">
+    <div class="content-area" style="display: flex; align-items: center; justify-content: center;">
+        <div style="max-width: 800px;">
+            <i class="fa-solid fa-quote-left" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2 style="font-size: clamp(24px, 6vw, 48px); line-height: 1.2; font-weight: 400; font-style: italic;">"Erfolg ist kein Zufall. Es ist Vorbereitung, harte Arbeit und das Wissen, dass das Team hinter einem steht."</h2>
+            <p style="margin-top: 20px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-size: 12px;">TV KAPELLEN 3 | 2026/27</p>
         </div>
     </div>
 </div>
 
 <script>
-// --- CONFIGURATION ---
-let currentUser = localStorage.getItem('tvk3_user_26_27_sheet');
+// --- CORE LOGIC ---
+let currentUser = localStorage.getItem('tvk3_user_26_27_mobile');
 
-// HIER DEINE APPS-SCRIPT URL EINTRAGEN!
+// DEINE APPS SCRIPT URL HIER EINTRAGEN
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwq3k6-87Hb0HqFLsn2j4Xc1K_QS1Zh1-k_qBUzMEyM0ZfPfbQtH3dyyHlDosvSN3Eo5A/exec'; 
 
 function confirmLogin() {
     const sel = document.getElementById('player-select').value;
     if(!sel) return;
-    localStorage.setItem('tvk3_user_26_27_sheet', sel);
+    localStorage.setItem('tvk3_user_26_27_mobile', sel);
     currentUser = sel;
     document.getElementById('onboarding').style.display = 'none';
     initApp();
 }
 
 function logout() {
-    localStorage.removeItem('tvk3_user_26_27_sheet');
+    localStorage.removeItem('tvk3_user_26_27_mobile');
     location.reload();
 }
 
@@ -234,13 +292,10 @@ function formatPlayerName(name) {
     return name;
 }
 
-// Hilfsfunktion zur Bereinigung des Datumsformats
 function formatGermanDate(dateStr) {
     if (!dateStr) return 'Termin offen';
     let str = dateStr.toString().trim();
     if (str.toLowerCase().includes('offen') || str === '') return 'Termin offen';
-    
-    // Falls ein ISO-String kommt
     if (str.includes('T') && str.includes('-')) {
         try {
             const d = new Date(str);
@@ -255,7 +310,7 @@ function formatGermanDate(dateStr) {
 async function initApp() {
     if(!currentUser) return;
     document.getElementById('onboarding').style.display = 'none';
-    document.getElementById('active-user').innerHTML = "Eingeloggt als: " + formatPlayerName(currentUser);
+    document.getElementById('active-user').innerHTML = formatPlayerName(currentUser);
     
     const container = document.getElementById('match-grid');
 
@@ -267,7 +322,7 @@ async function initApp() {
         renderPerformanceChart(data.performance);
         
     } catch (err) {
-        container.innerHTML = '<p style="text-align:center; color:red; padding-top:50px;">Fehler beim Laden. Prüfe die URL.</p>';
+        container.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
     }
 }
 
@@ -282,25 +337,21 @@ function renderDashboard(matches, container) {
         const formattedZusagen = m.zusagen.map(formatPlayerName);
         const formattedAbsagen = m.absagen.map(formatPlayerName);
 
-        // Ort-Formatierung
         const isHeim = m.ort.trim().toUpperCase() === 'H';
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
-        // Sauberes Datum holen
-        const cleanDate = formatGermanDate(m.datum);
-
         card.innerHTML = `
             <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
             <h4>Spieltag ${m.id}</h4>
-            <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
-            <div class="match-date"><i class="fa-regular fa-clock"></i> ${cleanDate} - ${m.uhrzeit} Uhr</div>
+            <div class="match-title">vs. ${m.gegner || 'TBA'}</div>
+            <div class="match-date"><i class="fa-regular fa-clock"></i> ${formatGermanDate(m.datum)} - ${m.uhrzeit} Uhr</div>
             <div class="match-status">
-                <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
-                <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
+                <span class="status-yes"><strong>Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Keine Zusagen</i>'}</span>
+                <span class="status-no"><strong>Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine Absagen</i>'}</span>
             </div>
             <div class="action-row">
-                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Dabei</button>
+                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
                 <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
             </div>
         `;
@@ -311,104 +362,44 @@ function renderDashboard(matches, container) {
 function renderPerformanceChart(perfData) {
     const svg = document.getElementById('performance-svg');
     svg.innerHTML = '';
-    
     if(!perfData || perfData.length === 0) {
-        svg.innerHTML = '<text x="580" y="200" fill="white" text-anchor="middle">Keine Performance-Daten gefunden.</text>';
+        svg.innerHTML = '<text x="500" y="150" fill="white" text-anchor="middle">Keine Daten</text>';
         return;
     }
 
-    const width = 1160;
-    const height = 400;
-    const paddingLeft = 80;
-    const paddingRight = 60;
-    const paddingTop = 50;
-    const paddingBottom = 60;
+    const width = 1000;
+    const height = 300;
+    const pL = 50, pR = 40, pT = 40, pB = 40;
+    const chartW = width - pL - pR;
+    const chartH = height - pT - pB;
 
-    const averages = perfData.map(d => d.avg);
-    let maxAvg = Math.max(...averages, 60);
-    let minAvg = Math.min(...averages, 40);
-    maxAvg += 4;
-    minAvg -= 4;
-    
-    const avgRange = maxAvg - minAvg;
-    const chartWidth = width - paddingLeft - paddingRight;
-    const chartHeight = height - paddingTop - paddingBottom;
+    const avgs = perfData.map(d => d.avg);
+    let max = Math.max(...avgs, 60) + 2;
+    let min = Math.min(...avgs, 40) - 2;
+    const range = max - min;
 
-    let points = [];
-    let stepX = perfData.length > 1 ? chartWidth / (perfData.length - 1) : chartWidth;
-
-    perfData.forEach((d, i) => {
-        let x = paddingLeft + (i * stepX);
-        let y = paddingTop + chartHeight - ((d.avg - minAvg) / avgRange * chartHeight);
-        points.push({x: x, y: y, monat: d.monat, avg: d.avg});
+    let points = perfData.map((d, i) => {
+        let x = pL + (i * (chartW / (perfData.length - 1 || 1)));
+        let y = pT + chartH - ((d.avg - min) / range * chartH);
+        return {x, y, monat: d.monat, avg: d.avg};
     });
 
-    // Gitternetz
-    for(let scale = 0; scale <= 4; scale++) {
-        let val = minAvg + (avgRange * (scale / 4));
-        let yPos = paddingTop + chartHeight - (scale / 4 * chartHeight);
-        
-        let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", paddingLeft);
-        line.setAttribute("y1", yPos);
-        line.setAttribute("x2", width - paddingRight);
-        line.setAttribute("y2", yPos);
-        line.setAttribute("stroke", "rgba(255,255,255,0.05)");
-        svg.appendChild(line);
+    let poly = points.map(p => `${p.x},${p.y}`).join(' ');
+    let area = `${pL},${pT+chartH} ${poly} ${points[points.length-1].x},${pT+chartH} Z`;
 
-        let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        txt.setAttribute("x", paddingLeft - 20);
-        txt.setAttribute("y", yPos + 5);
-        txt.setAttribute("fill", "var(--text-dim)");
-        txt.setAttribute("font-size", "14");
-        txt.setAttribute("text-anchor", "end");
-        txt.textContent = val.toFixed(1);
-        svg.appendChild(txt);
-    }
-
-    let polylinePoints = points.map(p => `${p.x},${p.y}`).join(' ');
-    let areaPoints = `${paddingLeft},${paddingTop + chartHeight} ` + polylinePoints + ` ${points[points.length-1].x},${paddingTop + chartHeight} Z`;
-
-    let areaPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    areaPath.setAttribute("class", "area-fill");
-    areaPath.setAttribute("d", "M " + areaPoints);
-    svg.appendChild(areaPath);
-
-    let linePoly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    linePoly.setAttribute("class", "line-stroke");
-    linePoly.setAttribute("points", polylinePoints);
-    svg.appendChild(linePoly);
+    svg.innerHTML += `<path class="area-fill" d="M ${area}" />`;
+    svg.innerHTML += `<polyline class="line-stroke" points="${poly}" />`;
 
     points.forEach(p => {
-        let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("class", "chart-dot");
-        circle.setAttribute("cx", p.x);
-        circle.setAttribute("cy", p.y);
-        circle.setAttribute("r", "7");
-        svg.appendChild(circle);
-
-        let valTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        valTxt.setAttribute("class", "chart-value-text");
-        valTxt.setAttribute("x", p.x);
-        valTxt.setAttribute("y", p.y - 15);
-        valTxt.textContent = p.avg.toFixed(1);
-        svg.appendChild(valTxt);
-
-        let mTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        mTxt.setAttribute("x", p.x);
-        mTxt.setAttribute("y", height - 20);
-        mTxt.setAttribute("fill", "var(--text-dim)");
-        mTxt.setAttribute("font-size", "14");
-        mTxt.setAttribute("text-anchor", "middle");
-        mTxt.textContent = p.monat.toUpperCase();
-        svg.appendChild(mTxt);
+        svg.innerHTML += `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="5" />`;
+        svg.innerHTML += `<text class="chart-value-text" x="${p.x}" y="${p.y-12}">${p.avg.toFixed(1)}</text>`;
+        svg.innerHTML += `<text x="${p.x}" y="${height-10}" fill="var(--text-dim)" font-size="12" text-anchor="middle">${p.monat.toUpperCase()}</text>`;
     });
 }
 
 async function updateStatus(matchId, status) {
     await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: matchId, spieler: currentUser, status: status })
     });
