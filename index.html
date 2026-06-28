@@ -138,7 +138,7 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
             <div class="tile">
                 <i class="fa-solid fa-shield-halved"></i>
                 <h3>Klassenerhalt</h3>
-                <p>Sicherung der Liga durch konstante Kaderverfügbarkeit, strategic Aufstellungen und Fokus bei engen Matches.</p>
+                <p>Sicherung der Liga durch konstante Kaderverfügbarkeit, strategische Aufstellungen und Fokus bei engen Matches.</p>
             </div>
             <div class="tile">
                 <i class="fa-solid fa-handshake"></i>
@@ -234,6 +234,24 @@ function formatPlayerName(name) {
     return name;
 }
 
+// Hilfsfunktion zur Bereinigung des Datumsformats
+function formatGermanDate(dateStr) {
+    if (!dateStr) return 'Termin offen';
+    let str = dateStr.toString().trim();
+    if (str.toLowerCase().includes('offen') || str === '') return 'Termin offen';
+    
+    // Falls ein ISO-String (z.B. 2026-09-01T22:00:00.000Z) kommt
+    if (str.includes('T') && str.includes('-')) {
+        try {
+            const d = new Date(str);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+        } catch (e) {}
+    }
+    return str;
+}
+
 async function initApp() {
     if(!currentUser) return;
     document.getElementById('onboarding').style.display = 'none';
@@ -269,11 +287,14 @@ function renderDashboard(matches, container) {
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
+        // Sauberes Datum holen
+        const cleanDate = formatGermanDate(m.datum);
+
         card.innerHTML = `
             <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
             <h4>Spieltag ${m.id}</h4>
             <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
-            <div class="match-date"><i class="fa-regular fa-clock"></i> ${m.datum || 'Termin offen'} - ${m.uhrzeit} Uhr</div>
+            <div class="match-date"><i class="fa-regular fa-clock"></i> ${cleanDate} - ${m.uhrzeit} Uhr</div>
             <div class="match-status">
                 <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
                 <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
