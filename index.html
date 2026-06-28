@@ -1,1 +1,384 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Kapellen 3 - Saison 2026/27</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+/* 1. CORE THEME & RESET */
+:root {
+  --navy: #001f3f;
+  --gold: #D4AF37;
+  --gold-light: #f1e4b8;
+  --white: #ffffff;
+  --bg-dark: #050a14;
+  --card-bg: #0c1626;
+  --accent-blue: #0074D9;
+  --text-main: #e2e8f0;
+  --text-dim: #94a3b8;
+  --zusage: #10b981;
+  --absage: #ef4444;
+}
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: #1a1a1a;
+  display: grid;
+  gap: 40px;
+  place-items: center;
+  padding: 40px 0;
+  font-family: 'Lato', sans-serif;
+}
+
+.slide-container {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 60px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* DECORATIVE ELEMENTS */
+.slide-container::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 116, 217, 0.08) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.slide-container > * { position: relative; z-index: 1; }
+
+/* TYPOGRAPHY */
+h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
+h1 { font-size: 84px; line-height: 1.1; margin-bottom: 10px; }
+.slide-title { font-size: 36px; font-weight: 400; margin-bottom: 40px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
+p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
+
+/* LAYOUTS */
+.title-layout { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.title-layout span { color: var(--gold); }
+
+.content-area { flex-grow: 1; width: 100%; }
+
+.tiled-content { display: flex; gap: 30px; width: 100%; height: 100%; }
+.tile { background: var(--card-bg); padding: 40px; border-radius: 4px; border-top: 4px solid var(--gold); flex: 1; display: flex; flex-direction: column; gap: 15px; }
+.tile i { font-size: 48px; color: var(--gold); }
+.tile h3 { font-size: 24px; color: var(--white); }
+
+/* AREA CHART TREND */
+.area-chart-container { width: 100%; height: 350px; margin-top: 20px; }
+.area-chart-svg { width: 100%; height: 100%; overflow: visible; }
+.area-fill { fill: rgba(0, 116, 217, 0.2); }
+.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; }
+
+/* TABLE */
+.table-layout table { width: 100%; border-collapse: collapse; }
+.table-layout th { text-align: left; padding: 15px; border-bottom: 2px solid var(--gold); color: var(--gold); text-transform: uppercase; font-size: 14px; }
+.table-layout td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 16px; }
+
+/* HIGHLIGHTED NUMBERS */
+.highlight-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; text-align: center; }
+.highlight-item .number { font-size: 120px; font-weight: 700; color: var(--gold); font-family: 'Poppins'; line-height: 1; }
+.highlight-item .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); }
+
+/* APP SLIDE SPECIFIC */
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 500px; overflow-y: auto; padding-right: 10px; }
+.app-grid::-webkit-scrollbar { width: 6px; }
+.app-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 20px; }
+.match-card h4 { font-size: 12px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; }
+.match-card .match-date { font-size: 13px; color: var(--text-dim); margin-bottom: 15px; }
+.match-status { font-size: 12px; margin-bottom: 15px; }
+.match-status strong { display: block; color: var(--white); margin-bottom: 2px; }
+.status-yes { color: var(--zusage); }
+.status-no { color: var(--absage); }
+.action-row { display: flex; gap: 10px; }
+.app-btn { flex: 1; padding: 8px; border: 1px solid #333; border-radius: 4px; background: transparent; color: white; cursor: pointer; font-size: 11px; font-weight: 700; transition: 0.2s; text-transform: uppercase; }
+.app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: black; }
+.app-btn.active-no { background: var(--absage); border-color: var(--absage); color: white; }
+
+/* HIGHLIGHT CAPTAIN STYLE */
+.captain-badge { background: var(--gold); color: #000; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 3px; margin-left: 4px; display: inline-block; }
+.captain-highlight { color: var(--gold) !important; font-weight: bold; }
+
+/* LOGIN OVERLAY */
+#onboarding { position: absolute; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.onboard-card { background: var(--card-bg); padding: 50px; border-radius: 12px; border: 1px solid var(--gold); width: 450px; text-align: center; }
+.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 4px; margin: 20px 0; font-size: 16px; }
+
+/* IMAGES */
+.image-tile-grid { display: flex; gap: 20px; width: 100%; height: 100%; }
+.img-wrapper { flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold); }
+.img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slide1">
+    <div class="title-layout">
+        <p style="color: var(--gold); letter-spacing: 5px; font-weight: 700;">PREMIUM MANAGEMENT</p>
+        <h1>TV Kapellen 3<br><span>Saison 2026/27</span></h1>
+        <p style="max-width: 600px;">Strategische Planung, digitale Kaderverwaltung und Performance-Tracking für die kommende Spielzeit.</p>
+    </div>
+</div>
+
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Mission & Zielsetzung</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Präzision</h3>
+                <p>Steigerung des Team-Averages um 15% durch systematisches Doppel-Training und Mentaltraining.</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-ranking-star"></i>
+                <h3>Aufstieg</h3>
+                <p>Platzierung unter den Top 3 der Liga durch konstante Kaderverfügbarkeit und strategische Aufstellungen.</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-handshake"></i>
+                <h3>Teamgeist</h3>
+                <p>100% Identifikation mit dem TV Kapellen durch gemeinschaftliche Events und digitale Transparenz.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Performance Trend Analyse</h2>
+    <div class="content-area">
+        <p>Prognostizierter Saisonverlauf basierend auf den Trainingsdaten der Vorbereitung.</p>
+        <div class="area-chart-container">
+            <svg class="area-chart-svg" viewBox="0 0 1000 400">
+                <path class="area-fill" d="M0,350 L200,280 L400,250 L600,180 L800,100 L1000,50 L1000,350 Z"></path>
+                <polyline class="line-stroke" points="0,350 200,280 400,250 600,180 800,100 1000,50"></polyline>
+                <g style="font-size: 14px; fill: var(--text-dim);">
+                    <text x="0" y="380">SEP</text><text x="200" y="380">NOV</text><text x="400" y="380">JAN</text>
+                    <text x="600" y="380">MÄR</text><text x="800" y="380">MAI</text><text x="950" y="380">POKAL</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide4">
+    <div id="onboarding">
+        <div class="onboard-card">
+            <i class="fa-solid fa-id-badge" style="font-size: 50px; color: var(--gold);"></i>
+            <h2 style="margin-top: 15px;">Login Required</h2>
+            <p>Bitte wähle dein Profil aus der Kaderliste 26/27.</p>
+            <select id="player-select">
+                <option value="" disabled selected>Identität wählen...</option>
+                <option value="Jürgen Schützendorf (TC 1)">Jürgen Schützendorf (TC 1)</option>
+                <option value="Ludger Schledorn">Ludger Schledorn</option>
+                <option value="Markus Lenz">Markus Lenz</option>
+                <option value="Niklas Weichert">Niklas Weichert</option>
+                <option value="Andreas Denner">Andreas Denner</option>
+                <option value="Markus Ginsel">Markus Ginsel</option>
+                <option value="Lars Neutag">Lars Neutag</option>
+                <option value="Wolfram Senger">Wolfram Senger</option>
+                <option value="Dominik Helmke">Dominik Helmke</option>
+                <option value="Michael Müller">Michael Müller</option>
+            </select>
+            <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">ZUGANG FREISCHALTEN</button>
+        </div>
+    </div>
+
+    <h2 class="slide-title">Squad-Dashboard 2026/27</h2>
+    <div class="content-area">
+        <div id="match-grid" class="app-grid">
+            </div>
+        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; display: flex; justify-content: space-between;">
+            <span id="active-user" style="color: var(--gold); font-weight: 700;"></span>
+            <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer;">Profil wechseln</button>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">Vorläufiger Spielplan</h2>
+    <div class="content-area">
+        <div class="table-layout">
+            <table>
+                <thead>
+                    <tr><th>Spieltag</th><th>Datum</th><th>Gegner</th><th>Heim/Auswärts</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>01</td><td>12.09.2026</td><td>Gelderner DC 2</td><td>Heim</td></tr>
+                    <tr><td>02</td><td>26.09.2026</td><td>DG Uerdingen 1</td><td>Auswärts</td></tr>
+                    <tr><td>03</td><td>10.10.2026</td><td>DSC Doppel1 Team 3</td><td>Heim</td></tr>
+                    <tr><td>04</td><td>31.10.2026</td><td>TV Asberg 2</td><td>Auswärts</td></tr>
+                    <tr><td>05</td><td>14.11.2026</td><td>Moerser Steeldart Cup</td><td>Neutral</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Saison in Zahlen</h2>
+    <div class="content-area">
+        <div class="highlight-grid">
+            <div class="highlight-item">
+                <div class="number">18</div>
+                <div class="label">Matchdays</div>
+            </div>
+            <div class="highlight-item">
+                <div class="number">10</div>
+                <div class="label">Kader-Spieler</div>
+            </div>
+            <div class="highlight-item">
+                <div class="number">1</div>
+                <div class="label">Ziel: Aufstieg</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">Arena & Atmosphäre</h2>
+    <div class="content-area">
+        <div class="image-tile-grid">
+            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/7924883285994939672" alt="Board"></div>
+            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/2224604799856563993" alt="Bar"></div>
+            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/13043370258327377279" alt="Team"></div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide8">
+    <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+        <div style="text-align: center; max-width: 800px;">
+            <i class="fa-solid fa-quote-left" style="font-size: 60px; color: var(--gold); margin-bottom: 30px;"></i>
+            <h2 style="font-size: 48px; line-height: 1.2; font-weight: 400; font-style: italic;">"Erfolg ist kein Zufall. Es ist Vorbereitung, harte Arbeit und das Wissen, dass das Team hinter einem steht."</h2>
+            <p style="margin-top: 20px; letter-spacing: 3px; color: var(--gold);">TV KAPELLEN 3 | 2026/27</p>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide9" style="background-image: linear-gradient(rgba(5,10,20,0.8), rgba(5,10,20,0.8)), url('http://googleusercontent.com/image_collection/image_retrieval/103222423677319478'); background-size: cover;">
+    <div class="title-layout" style="align-items: center; text-align: center; width: 100%;">
+        <h2 style="font-size: 64px;">Ready for <span style="color: var(--gold);">Game On</span>?</h2>
+        <p>Die Saison 2026/27 wartet auf uns. Blau und Weiß ein Leben lang.</p>
+    </div>
+</div>
+
+<div class="slide-container" id="slide10">
+    <div class="title-layout" style="align-items: center; text-align: center; width: 100%;">
+        <h2 class="slide-title" style="border: none; padding: 0;">Kontakt & Impressum</h2>
+        <p>Kapitän: Jürgen Schützendorf</p>
+        <p>TV Kapellen 1919 e.V. | Abteilung Darts</p>
+        <div style="margin-top: 40px; font-size: 24px; color: var(--gold);">
+            <i class="fa-brands fa-instagram"></i> @tvkapellendarts
+        </div>
+    </div>
+</div>
+
+<script>
+// --- GOOGLE SHEETS LIVE INTEGRATION ---
+let currentUser = localStorage.getItem('tvk3_user_26_27_sheet');
+
+// ACHTUNG: HIER DEINE WEB-APP-URL AUS GOOGLE APPS SCRIPT EINTRAGEN!
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBg37yiCUluqJ_1Im8IbwDNxsAHMk4_am3pPFmTqLnmyq7z7ntdjCi5MqkikB71ZKLig/exec'; 
+
+function confirmLogin() {
+    const sel = document.getElementById('player-select').value;
+    if(!sel) return;
+    localStorage.setItem('tvk3_user_26_27_sheet', sel);
+    currentUser = sel;
+    document.getElementById('onboarding').style.display = 'none';
+    renderDashboard();
+}
+
+function logout() {
+    localStorage.removeItem('tvk3_user_26_27_sheet');
+    location.reload();
+}
+
+// Namen optisch aufbereiten (Käpt'n golden färben)
+function formatPlayerName(name) {
+    if (name.includes("Jürgen Schützendorf")) {
+        return `<span class="captain-highlight">Jürgen Schützendorf <span class="captain-badge">TC 1</span></span>`;
+    }
+    return name;
+}
+
+async function renderDashboard() {
+    if(!currentUser) return;
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('active-user').innerHTML = "Eingeloggt als: " + formatPlayerName(currentUser);
+    
+    const container = document.getElementById('match-grid');
+    container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Lade Spielplan aus Google Sheets...</p>';
+
+    try {
+        let response = await fetch(GOOGLE_SCRIPT_URL);
+        let matches = await response.json();
+        
+        container.innerHTML = '';
+        matches.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            
+            const isYes = m.zusagen.includes(currentUser);
+            const isNo = m.absagen.includes(currentUser);
+
+            // Listen formatieren (Jürgen hervorheben)
+            const formattedZusagen = m.zusagen.map(formatPlayerName);
+            const formattedAbsagen = m.absagen.map(formatPlayerName);
+
+            card.innerHTML = `
+                <h4>Saison 2026/27</h4>
+                <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
+                <div class="match-date">📆 Spieltag ${m.id} - ${m.datum || 'Termin offen'}</div>
+                <div class="match-status">
+                    <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
+                    <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
+                </div>
+                <div class="action-row">
+                    <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Dabei</button>
+                    <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    } catch (err) {
+        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red;">Fehler beim Laden der Google-Tabelle. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
+    }
+}
+
+async function updateStatus(matchId, status) {
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: matchId, spieler: currentUser, status: status })
+    });
+    
+    // Kleiner visueller Buffer vor dem Neuladen der Daten
+    setTimeout(renderDashboard, 400);
+}
+
+// Start sequence
+if(currentUser) renderDashboard();
+</script>
+
+</body>
+</html>
