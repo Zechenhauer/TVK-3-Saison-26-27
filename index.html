@@ -44,7 +44,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 60px;
+  padding: 50px 60px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
   border: 1px solid rgba(212, 175, 55, 0.1);
 }
@@ -64,26 +64,26 @@ body {
 
 h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
 h1 { font-size: 84px; line-height: 1.1; margin-bottom: 10px; }
-.slide-title { font-size: 36px; font-weight: 400; margin-bottom: 40px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
+.slide-title { font-size: 32px; font-weight: 400; margin-bottom: 25px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
 p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 
 .title-layout { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 .title-layout span { color: var(--gold); }
 
-.content-area { flex-grow: 1; width: 100%; }
+.content-area { flex-grow: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-between; }
 
 .tiled-content { display: flex; gap: 30px; width: 100%; height: 100%; }
 .tile { background: var(--card-bg); padding: 40px; border-radius: 4px; border-top: 4px solid var(--gold); flex: 1; display: flex; flex-direction: column; gap: 15px; }
 .tile i { font-size: 48px; color: var(--gold); }
 .tile h3 { font-size: 24px; color: var(--white); }
 
-/* AREA CHART TREND */
-.area-chart-container { width: 100%; height: 350px; margin-top: 20px; position: relative; }
+/* AREA CHART TREND (COMPACT) */
+.area-chart-container { width: 100%; height: 150px; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02); }
 .area-chart-svg { width: 100%; height: 100%; overflow: visible; }
-.area-fill { fill: rgba(0, 116, 217, 0.15); transition: all 0.5s ease; }
-.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; transition: all 0.5s ease; }
-.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 2; cursor: pointer; }
-.chart-value-text { fill: var(--white); font-size: 14px; font-weight: bold; text-anchor: middle; }
+.area-fill { fill: rgba(0, 116, 217, 0.12); transition: all 0.5s ease; }
+.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 3; transition: all 0.5s ease; }
+.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 1.5; }
+.chart-value-text { fill: var(--white); font-size: 11px; font-weight: bold; text-anchor: middle; }
 
 /* HIGHLIGHTED NUMBERS */
 .highlight-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; text-align: center; }
@@ -91,14 +91,20 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 .highlight-item .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); }
 
 /* APP SLIDE SPECIFIC */
-.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 500px; overflow-y: auto; padding-right: 10px; }
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 320px; overflow-y: auto; padding-right: 10px; }
 .app-grid::-webkit-scrollbar { width: 6px; }
 .app-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 20px; }
-.match-card h4 { font-size: 12px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
-.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; }
-.match-card .match-date { font-size: 13px; color: var(--text-dim); margin-bottom: 15px; }
-.match-status { font-size: 12px; margin-bottom: 15px; }
+.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 15px; position: relative;}
+
+/* Heim / Auswärts Badge */
+.game-loc-badge { position: absolute; top: 12px; right: 12px; padding: 3px 7px; font-size: 11px; font-weight: bold; border-radius: 4px; }
+.loc-h { background: rgba(0, 116, 217, 0.2); color: #0074D9; border: 1px solid #0074D9; }
+.loc-a { background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+
+.match-card h4 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
+.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 25px; }
+.match-card .match-date { font-size: 12px; color: var(--gold); margin-bottom: 10px; font-weight: bold; }
+.match-status { font-size: 12px; margin-bottom: 12px; line-height: 1.4; }
 .match-status strong { display: block; color: var(--white); margin-bottom: 2px; }
 .status-yes { color: var(--zusage); }
 .status-no { color: var(--absage); }
@@ -149,18 +155,6 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 </div>
 
 <div class="slide-container" id="slide3">
-    <h2 class="slide-title">Performance Trend Analyse</h2>
-    <div class="content-area">
-        <p>Tatsächliche Entwicklung des Team-Averages im Saisonverlauf (Live aus Google Sheets).</p>
-        <div class="area-chart-container">
-            <svg class="area-chart-svg" viewBox="0 0 1000 320" id="performance-svg">
-                <p id="chart-loading" style="text-align:center; padding-top:100px;">Lade Chart-Daten...</p>
-            </svg>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide4">
     <div id="onboarding">
         <div class="onboard-card">
             <i class="fa-solid fa-id-badge" style="font-size: 50px; color: var(--gold);"></i>
@@ -183,18 +177,24 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
         </div>
     </div>
 
-    <h2 class="slide-title">Squad-Dashboard 2026/27</h2>
+    <h2 class="slide-title">Squad-Dashboard & Performance 2026/27</h2>
     <div class="content-area">
-        <div id="match-grid" class="app-grid">
-            </div>
-        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; display: flex; justify-content: space-between;">
+        <div id="match-grid" class="app-grid"></div>
+        
+        <div class="area-chart-container">
+            <svg class="area-chart-svg" viewBox="0 0 1160 130" id="performance-svg">
+                <text x="580" y="70" fill="var(--text-dim)" text-anchor="middle" id="chart-loading">Lade Live-Performance...</text>
+            </svg>
+        </div>
+
+        <div style="margin-top: 10px; border-top: 1px solid #222; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px;">
             <span id="active-user" style="color: var(--gold); font-weight: 700;"></span>
             <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer;">Profil wechseln</button>
         </div>
     </div>
 </div>
 
-<div class="slide-container" id="slide5">
+<div class="slide-container" id="slide4">
     <h2 class="slide-title">Saison in Zahlen</h2>
     <div class="content-area">
         <div class="highlight-grid">
@@ -214,7 +214,7 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
     </div>
 </div>
 
-<div class="slide-container" id="slide6">
+<div class="slide-container" id="slide5">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 100%;">
         <div style="text-align: center; max-width: 800px;">
             <i class="fa-solid fa-quote-left" style="font-size: 60px; color: var(--gold); margin-bottom: 30px;"></i>
@@ -229,7 +229,7 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 let currentUser = localStorage.getItem('tvk3_user_26_27_sheet');
 
 // HIER DEINE APPS-SCRIPT URL EINTRAGEN!
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoKltneNVF6nm5LTywJeXHN1pjRHDKdok09_f2HG0veHJ9Ul3VKLO13hqhLGAyQeEcJg/exec'; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqGLea1bv7e27I6sRxi85uRw-3tD3p1s64pdXapRfQsL3WMqiEJwPuRvFPu83MUYdyNA/exec'; 
 
 function confirmLogin() {
     const sel = document.getElementById('player-select').value;
@@ -258,7 +258,7 @@ async function initApp() {
     document.getElementById('active-user').innerHTML = "Eingeloggt als: " + formatPlayerName(currentUser);
     
     const container = document.getElementById('match-grid');
-    container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Lade Spieldaten aus Google Sheets...</p>';
+    container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding-top: 50px;">Lade Spieldaten aus Google Sheets...</p>';
 
     try {
         let response = await fetch(GOOGLE_SCRIPT_URL);
@@ -268,7 +268,7 @@ async function initApp() {
         renderPerformanceChart(data.performance);
         
     } catch (err) {
-        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red;">Fehler beim Laden. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
+        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red; padding-top: 50px;">Fehler beim Laden. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
     }
 }
 
@@ -284,10 +284,16 @@ function renderDashboard(matches, container) {
         const formattedZusagen = m.zusagen.map(formatPlayerName);
         const formattedAbsagen = m.absagen.map(formatPlayerName);
 
+        // Ort-Formatierung für das Abzeichen
+        const isHeim = m.ort.trim().toUpperCase() === 'H';
+        const badgeClass = isHeim ? 'loc-h' : 'loc-a';
+        const badgeText = isHeim ? 'Heim' : 'Auswärts';
+
         card.innerHTML = `
-            <h4>Saison 2026/27</h4>
+            <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
+            <h4>Spieltag ${m.id}</h4>
             <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
-            <div class="match-date">📆 Spieltag ${m.id} - ${m.datum || 'Termin offen'}</div>
+            <div class="match-date"><i class="fa-regular fa-calendar"></i> ${m.datum || 'Termin offen'} um ${m.uhrzeit} Uhr</div>
             <div class="match-status">
                 <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
                 <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
@@ -306,22 +312,22 @@ function renderPerformanceChart(perfData) {
     svg.innerHTML = '';
     
     if(!perfData || perfData.length === 0) {
-        svg.innerHTML = '<text x="500" y="150" fill="white" text-anchor="middle">Noch keine Performance-Daten eingetragen.</text>';
+        svg.innerHTML = '<text x="580" y="70" fill="white" text-anchor="middle">Noch keine Performance-Daten eingetragen.</text>';
         return;
     }
 
-    const width = 1000;
-    const height = 260;
-    const paddingLeft = 60;
+    const width = 1160;
+    const height = 130;
+    const paddingLeft = 50;
     const paddingRight = 40;
-    const paddingTop = 30;
-    const paddingBottom = 40;
+    const paddingTop = 25;
+    const paddingBottom = 25;
 
     const averages = perfData.map(d => d.avg);
     let maxAvg = Math.max(...averages, 60);
     let minAvg = Math.min(...averages, 40);
-    maxAvg += 3;
-    minAvg -= 3;
+    maxAvg += 2;
+    minAvg -= 2;
     
     const avgRange = maxAvg - minAvg;
     const chartWidth = width - paddingLeft - paddingRight;
@@ -336,23 +342,23 @@ function renderPerformanceChart(perfData) {
         points.push({x: x, y: y, monat: d.monat, avg: d.avg});
     });
 
-    for(let scale = 0; scale <= 4; scale++) {
-        let val = minAvg + (avgRange * (scale / 4));
-        let yPos = paddingTop + chartHeight - (scale / 4 * chartHeight);
+    for(let scale = 0; scale <= 2; scale++) {
+        let val = minAvg + (avgRange * (scale / 2));
+        let yPos = paddingTop + chartHeight - (scale / 2 * chartHeight);
         
         let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", paddingLeft);
         line.setAttribute("y1", yPos);
         line.setAttribute("x2", width - paddingRight);
         line.setAttribute("y2", yPos);
-        line.setAttribute("stroke", "rgba(255,255,255,0.05)");
+        line.setAttribute("stroke", "rgba(255,255,255,0.04)");
         svg.appendChild(line);
 
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        txt.setAttribute("x", paddingLeft - 15);
-        txt.setAttribute("y", yPos + 5);
+        txt.setAttribute("x", paddingLeft - 12);
+        txt.setAttribute("y", yPos + 4);
         txt.setAttribute("fill", "var(--text-dim)");
-        txt.setAttribute("font-size", "12");
+        txt.setAttribute("font-size", "10");
         txt.setAttribute("text-anchor", "end");
         txt.textContent = val.toFixed(1);
         svg.appendChild(txt);
@@ -376,21 +382,21 @@ function renderPerformanceChart(perfData) {
         circle.setAttribute("class", "chart-dot");
         circle.setAttribute("cx", p.x);
         circle.setAttribute("cy", p.y);
-        circle.setAttribute("r", "6");
+        circle.setAttribute("r", "4");
         svg.appendChild(circle);
 
         let valTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         valTxt.setAttribute("class", "chart-value-text");
         valTxt.setAttribute("x", p.x);
-        valTxt.setAttribute("y", p.y - 12);
+        valTxt.setAttribute("y", p.y - 8);
         valTxt.textContent = p.avg.toFixed(1);
         svg.appendChild(valTxt);
 
         let mTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         mTxt.setAttribute("x", p.x);
-        mTxt.setAttribute("y", height - 10);
+        mTxt.setAttribute("y", height - 4);
         mTxt.setAttribute("fill", "var(--text-dim)");
-        mTxt.setAttribute("font-size", "13");
+        mTxt.setAttribute("font-size", "11");
         mTxt.setAttribute("text-anchor", "middle");
         mTxt.textContent = p.monat.toUpperCase();
         svg.appendChild(mTxt);
