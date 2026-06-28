@@ -113,10 +113,6 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 #onboarding { position: absolute; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .onboard-card { background: var(--card-bg); padding: 50px; border-radius: 12px; border: 1px solid var(--gold); width: 450px; text-align: center; }
 .onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 4px; margin: 20px 0; font-size: 16px; }
-
-.image-tile-grid { display: flex; gap: 20px; width: 100%; height: 100%; }
-.img-wrapper { flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold); }
-.img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -219,17 +215,6 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 </div>
 
 <div class="slide-container" id="slide6">
-    <h2 class="slide-title">Arena & Atmosphäre</h2>
-    <div class="content-area">
-        <div class="image-tile-grid">
-            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/7924883285994939672" alt="Board"></div>
-            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/2224604799856563993" alt="Bar"></div>
-            <div class="img-wrapper"><img src="http://googleusercontent.com/image_collection/image_retrieval/13043370258327377279" alt="Team"></div>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide7">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 100%;">
         <div style="text-align: center; max-width: 800px;">
             <i class="fa-solid fa-quote-left" style="font-size: 60px; color: var(--gold); margin-bottom: 30px;"></i>
@@ -239,14 +224,14 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
     </div>
 </div>
 
-<div class="slide-container" id="slide8" style="background-image: linear-gradient(rgba(5,10,20,0.8), rgba(5,10,20,0.8)), url('http://googleusercontent.com/image_collection/image_retrieval/103222423677319478'); background-size: cover;">
+<div class="slide-container" id="slide7" style="background-image: linear-gradient(rgba(5,10,20,0.8), rgba(5,10,20,0.8)), url('http://googleusercontent.com/image_collection/image_retrieval/103222423677319478'); background-size: cover;">
     <div class="title-layout" style="align-items: center; text-align: center; width: 100%;">
         <h2 style="font-size: 64px;">Ready for <span style="color: var(--gold);">Game On</span>?</h2>
         <p>Die Saison 2026/27 wartet auf uns. Blau und Weiß ein Leben lang.</p>
     </div>
 </div>
 
-<div class="slide-container" id="slide9">
+<div class="slide-container" id="slide8">
     <div class="title-layout" style="align-items: center; text-align: center; width: 100%;">
         <h2 class="slide-title" style="border: none; padding: 0;">Kontakt & Impressum</h2>
         <p>Kapitän: Jürgen Schützendorf</p>
@@ -261,7 +246,7 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 // --- CONFIGURATION ---
 let currentUser = localStorage.getItem('tvk3_user_26_27_sheet');
 
-// HIER DEINE NEUE APPS-SCRIPT URL EINTRAGEN!
+// HIER DEINE APPS-SCRIPT URL EINTRAGEN!
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoKltneNVF6nm5LTywJeXHN1pjRHDKdok09_f2HG0veHJ9Ul3VKLO13hqhLGAyQeEcJg/exec'; 
 
 function confirmLogin() {
@@ -285,7 +270,6 @@ function formatPlayerName(name) {
     return name;
 }
 
-// Zentraler Datenabruf für Dashboard und Diagramm
 async function initApp() {
     if(!currentUser) return;
     document.getElementById('onboarding').style.display = 'none';
@@ -298,10 +282,7 @@ async function initApp() {
         let response = await fetch(GOOGLE_SCRIPT_URL);
         let data = await response.json();
         
-        // 1. Dashboard (Spieltage) rendern
         renderDashboard(data.spieltage, container);
-        
-        // 2. Diagramm (Performance) rendern
         renderPerformanceChart(data.performance);
         
     } catch (err) {
@@ -338,10 +319,9 @@ function renderDashboard(matches, container) {
     });
 }
 
-// Logik zum automatischen Berechnen und Zeichnen des Diagramms
 function renderPerformanceChart(perfData) {
     const svg = document.getElementById('performance-svg');
-    svg.innerHTML = ''; // Ladehinweis entfernen
+    svg.innerHTML = '';
     
     if(!perfData || perfData.length === 0) {
         svg.innerHTML = '<text x="500" y="150" fill="white" text-anchor="middle">Noch keine Performance-Daten eingetragen.</text>';
@@ -355,34 +335,29 @@ function renderPerformanceChart(perfData) {
     const paddingTop = 30;
     const paddingBottom = 40;
 
-    // Skalierung ermitteln (Dynamische Y-Achse basierend auf den Dart-Averages)
     const averages = perfData.map(d => d.avg);
-    let maxAvg = Math.max(...averages, 60); // Mindestens bis 60 skalieren
-    let minAvg = Math.min(...averages, 40); // Mindestens ab 40 starten
-    maxAvg += 3; // Puffer oben
-    minAvg -= 3; // Puffer unten
+    let maxAvg = Math.max(...averages, 60);
+    let minAvg = Math.min(...averages, 40);
+    maxAvg += 3;
+    minAvg -= 3;
     
     const avgRange = maxAvg - minAvg;
     const chartWidth = width - paddingLeft - paddingRight;
     const chartHeight = height - paddingTop - paddingBottom;
 
-    // Punkte mathematisch für SVG umrechnen
     let points = [];
     let stepX = perfData.length > 1 ? chartWidth / (perfData.length - 1) : chartWidth;
 
     perfData.forEach((d, i) => {
         let x = paddingLeft + (i * stepX);
-        // Da im SVG 0 oben ist, müssen wir den Wert von der Höhe abziehen
         let y = paddingTop + chartHeight - ((d.avg - minAvg) / avgRange * chartHeight);
         points.push({x: x, y: y, monat: d.monat, avg: d.avg});
     });
 
-    // 1. Gitternetzlinien im Hintergrund zeichnen (Y-Achse)
     for(let scale = 0; scale <= 4; scale++) {
         let val = minAvg + (avgRange * (scale / 4));
         let yPos = paddingTop + chartHeight - (scale / 4 * chartHeight);
         
-        // Linie
         let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", paddingLeft);
         line.setAttribute("y1", yPos);
@@ -391,7 +366,6 @@ function renderPerformanceChart(perfData) {
         line.setAttribute("stroke", "rgba(255,255,255,0.05)");
         svg.appendChild(line);
 
-        // Achsen-Beschriftung links (z.B. "45.5 AVG")
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         txt.setAttribute("x", paddingLeft - 15);
         txt.setAttribute("y", yPos + 5);
@@ -402,25 +376,20 @@ function renderPerformanceChart(perfData) {
         svg.appendChild(txt);
     }
 
-    // 2. Pfade für Linie und Fläche generieren
     let polylinePoints = points.map(p => `${p.x},${p.y}`).join(' ');
     let areaPoints = `${paddingLeft},${paddingTop + chartHeight} ` + polylinePoints + ` ${points[points.length-1].x},${paddingTop + chartHeight} Z`;
 
-    // Fläche einfügen
     let areaPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
     areaPath.setAttribute("class", "area-fill");
     areaPath.setAttribute("d", "M " + areaPoints);
     svg.appendChild(areaPath);
 
-    // Linie einfügen
     let linePoly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     linePoly.setAttribute("class", "line-stroke");
     linePoly.setAttribute("points", polylinePoints);
     svg.appendChild(linePoly);
 
-    // 3. Datenpunkte (Kreise), Monatsnamen und Zahlenwerte zeichnen
     points.forEach(p => {
-        // Kreis
         let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("class", "chart-dot");
         circle.setAttribute("cx", p.x);
@@ -428,7 +397,6 @@ function renderPerformanceChart(perfData) {
         circle.setAttribute("r", "6");
         svg.appendChild(circle);
 
-        // Wert über dem Punkt
         let valTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         valTxt.setAttribute("class", "chart-value-text");
         valTxt.setAttribute("x", p.x);
@@ -436,7 +404,6 @@ function renderPerformanceChart(perfData) {
         valTxt.textContent = p.avg.toFixed(1);
         svg.appendChild(valTxt);
 
-        // Monatsname unten an der X-Achse
         let mTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         mTxt.setAttribute("x", p.x);
         mTxt.setAttribute("y", height - 10);
@@ -458,7 +425,6 @@ async function updateStatus(matchId, status) {
     setTimeout(initApp, 400);
 }
 
-// Start sequence
 if(currentUser) initApp();
 </script>
 
