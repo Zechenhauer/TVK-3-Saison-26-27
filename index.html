@@ -255,6 +255,28 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
     </div>
 </div>
 
+<div class="slide-container" id="slideDoppel">
+    <h2 class="slide-title">Doppel-Rangliste</h2>
+    <div class="content-area" style="overflow-x: auto;">
+        <table class="liga-table">
+            <thead>
+                <tr>
+                    <th>Spieler 1</th>
+                    <th>Spieler 2</th>
+                    <th style="width: 40px; text-align: center;">Sp</th>
+                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
+                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
+                </tr>
+            </thead>
+            <tbody id="doppel-table-body">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 20px;">Lade Doppel-Rangliste...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="slide-container" id="slide5" style="justify-content: center; text-align: center;">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center;">
         <div style="max-width: 800px;">
@@ -339,11 +361,13 @@ async function initApp() {
         renderDashboard(data.spieltage, matchContainer);
         renderKaderAndPersonalCard(data.statistiken, kaderContainer);
         renderLigaTable(data.ligatabelle, ligaContainer);
+        renderDoppelTable(data.doppeltabelle, document.getElementById('doppel-table-body'));
         
     } catch (err) {
         matchContainer.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
         kaderContainer.innerHTML = '<p style="text-align:center; color:red;">Verbindungsfehler!</p>';
         ligaContainer.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
+        document.getElementById('doppel-table-body').innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
     }
 }
 
@@ -450,7 +474,6 @@ function renderLigaTable(ligaData, container) {
     ligaData.forEach(row => {
         const tr = document.createElement('tr');
         
-        // Exakte Übereinstimmung mit dem Mannschaftsnamen in der Google Tabelle
         if (row.team.trim() === 'TV Kapellen 3') {
             tr.className = 'own-team';
         }
@@ -465,6 +488,26 @@ function renderLigaTable(ligaData, container) {
             <td style="text-align: center; font-weight: bold; color: var(--gold);">${row.punkte}</td>
             <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.sets}</td>
             <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.legs}</td>
+        `;
+        container.appendChild(tr);
+    });
+}
+
+function renderDoppelTable(doppelData, container) {
+    container.innerHTML = '';
+    if (!doppelData || doppelData.length === 0) {
+        container.innerHTML = '<tr><td colspan="5" style="text-align:center;">Keine Doppel-Daten vorhanden.</td></tr>';
+        return;
+    }
+
+    doppelData.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${row.spieler1}</td>
+            <td>${row.spieler2}</td>
+            <td style="text-align: center;">${row.spiele}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--zusage);">${row.siege}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--absage);">${row.niederlagen}</td>
         `;
         container.appendChild(tr);
     });
