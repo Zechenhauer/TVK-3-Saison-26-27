@@ -49,7 +49,6 @@ body {
   border: 1px solid rgba(212, 175, 55, 0.1);
 }
 
-/* DECORATIVE ELEMENTS */
 .slide-container::before {
   content: '';
   position: absolute;
@@ -63,13 +62,11 @@ body {
 
 .slide-container > * { position: relative; z-index: 1; }
 
-/* TYPOGRAPHY */
 h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
 h1 { font-size: 84px; line-height: 1.1; margin-bottom: 10px; }
 .slide-title { font-size: 36px; font-weight: 400; margin-bottom: 40px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
 p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 
-/* LAYOUTS */
 .title-layout { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 .title-layout span { color: var(--gold); }
 
@@ -81,10 +78,12 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 .tile h3 { font-size: 24px; color: var(--white); }
 
 /* AREA CHART TREND */
-.area-chart-container { width: 100%; height: 350px; margin-top: 20px; }
+.area-chart-container { width: 100%; height: 350px; margin-top: 20px; position: relative; }
 .area-chart-svg { width: 100%; height: 100%; overflow: visible; }
-.area-fill { fill: rgba(0, 116, 217, 0.2); }
-.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; }
+.area-fill { fill: rgba(0, 116, 217, 0.15); transition: all 0.5s ease; }
+.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; transition: all 0.5s ease; }
+.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 2; cursor: pointer; }
+.chart-value-text { fill: var(--white); font-size: 14px; font-weight: bold; text-anchor: middle; }
 
 /* HIGHLIGHTED NUMBERS */
 .highlight-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; text-align: center; }
@@ -108,16 +107,13 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 .app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: black; }
 .app-btn.active-no { background: var(--absage); border-color: var(--absage); color: white; }
 
-/* HIGHLIGHT CAPTAIN STYLE */
 .captain-badge { background: var(--gold); color: #000; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 3px; margin-left: 4px; display: inline-block; }
 .captain-highlight { color: var(--gold) !important; font-weight: bold; }
 
-/* LOGIN OVERLAY */
 #onboarding { position: absolute; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .onboard-card { background: var(--card-bg); padding: 50px; border-radius: 12px; border: 1px solid var(--gold); width: 450px; text-align: center; }
 .onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 4px; margin: 20px 0; font-size: 16px; }
 
-/* IMAGES */
 .image-tile-grid { display: flex; gap: 20px; width: 100%; height: 100%; }
 .img-wrapper { flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold); }
 .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
@@ -159,15 +155,10 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 <div class="slide-container" id="slide3">
     <h2 class="slide-title">Performance Trend Analyse</h2>
     <div class="content-area">
-        <p>Prognostizierter Saisonverlauf basierend auf den Trainingsdaten der Vorbereitung.</p>
+        <p>Tatsächliche Entwicklung des Team-Averages im Saisonverlauf (Live aus Google Sheets).</p>
         <div class="area-chart-container">
-            <svg class="area-chart-svg" viewBox="0 0 1000 400">
-                <path class="area-fill" d="M0,350 L200,280 L400,250 L600,180 L800,100 L1000,50 L1000,350 Z"></path>
-                <polyline class="line-stroke" points="0,350 200,280 400,250 600,180 800,100 1000,50"></polyline>
-                <g style="font-size: 14px; fill: var(--text-dim);">
-                    <text x="0" y="380">SEP</text><text x="200" y="380">NOV</text><text x="400" y="380">JAN</text>
-                    <text x="600" y="380">MÄR</text><text x="800" y="380">MAI</text><text x="950" y="380">POKAL</text>
-                </g>
+            <svg class="area-chart-svg" viewBox="0 0 1000 320" id="performance-svg">
+                <p id="chart-loading" style="text-align:center; padding-top:100px;">Lade Chart-Daten...</p>
             </svg>
         </div>
     </div>
@@ -267,11 +258,11 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 </div>
 
 <script>
-// --- GOOGLE SHEETS LIVE INTEGRATION ---
+// --- CONFIGURATION ---
 let currentUser = localStorage.getItem('tvk3_user_26_27_sheet');
 
-// ACHTUNG: HIER DEINE WEB-APP-URL AUS GOOGLE APPS SCRIPT EINTRAGEN!
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBg37yiCUluqJ_1Im8IbwDNxsAHMk4_am3pPFmTqLnmyq7z7ntdjCi5MqkikB71ZKLig/exec'; 
+// HIER DEINE NEUE APPS-SCRIPT URL EINTRAGEN!
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoKltneNVF6nm5LTywJeXHN1pjRHDKdok09_f2HG0veHJ9Ul3VKLO13hqhLGAyQeEcJg/exec'; 
 
 function confirmLogin() {
     const sel = document.getElementById('player-select').value;
@@ -279,7 +270,7 @@ function confirmLogin() {
     localStorage.setItem('tvk3_user_26_27_sheet', sel);
     currentUser = sel;
     document.getElementById('onboarding').style.display = 'none';
-    renderDashboard();
+    initApp();
 }
 
 function logout() {
@@ -287,7 +278,6 @@ function logout() {
     location.reload();
 }
 
-// Namen optisch aufbereiten (Käpt'n golden färben)
 function formatPlayerName(name) {
     if (name.includes("Jürgen Schützendorf")) {
         return `<span class="captain-highlight">Jürgen Schützendorf <span class="captain-badge">TC 1</span></span>`;
@@ -295,48 +285,167 @@ function formatPlayerName(name) {
     return name;
 }
 
-async function renderDashboard() {
+// Zentraler Datenabruf für Dashboard und Diagramm
+async function initApp() {
     if(!currentUser) return;
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('active-user').innerHTML = "Eingeloggt als: " + formatPlayerName(currentUser);
     
     const container = document.getElementById('match-grid');
-    container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Lade Spielplan aus Google Sheets...</p>';
+    container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Lade Spieldaten aus Google Sheets...</p>';
 
     try {
         let response = await fetch(GOOGLE_SCRIPT_URL);
-        let matches = await response.json();
+        let data = await response.json();
         
-        container.innerHTML = '';
-        matches.forEach(m => {
-            const card = document.createElement('div');
-            card.className = 'match-card';
-            
-            const isYes = m.zusagen.includes(currentUser);
-            const isNo = m.absagen.includes(currentUser);
-
-            // Listen formatieren (Jürgen hervorheben)
-            const formattedZusagen = m.zusagen.map(formatPlayerName);
-            const formattedAbsagen = m.absagen.map(formatPlayerName);
-
-            card.innerHTML = `
-                <h4>Saison 2026/27</h4>
-                <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
-                <div class="match-date">📆 Spieltag ${m.id} - ${m.datum || 'Termin offen'}</div>
-                <div class="match-status">
-                    <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
-                    <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
-                </div>
-                <div class="action-row">
-                    <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Dabei</button>
-                    <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
-                </div>
-            `;
-            container.appendChild(card);
-        });
+        // 1. Dashboard (Spieltage) rendern
+        renderDashboard(data.spieltage, container);
+        
+        // 2. Diagramm (Performance) rendern
+        renderPerformanceChart(data.performance);
+        
     } catch (err) {
-        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red;">Fehler beim Laden der Google-Tabelle. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
+        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red;">Fehler beim Laden. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
     }
+}
+
+function renderDashboard(matches, container) {
+    container.innerHTML = '';
+    matches.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'match-card';
+        
+        const isYes = m.zusagen.includes(currentUser);
+        const isNo = m.absagen.includes(currentUser);
+
+        const formattedZusagen = m.zusagen.map(formatPlayerName);
+        const formattedAbsagen = m.absagen.map(formatPlayerName);
+
+        card.innerHTML = `
+            <h4>Saison 2026/27</h4>
+            <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
+            <div class="match-date">📆 Spieltag ${m.id} - ${m.datum || 'Termin offen'}</div>
+            <div class="match-status">
+                <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
+                <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
+            </div>
+            <div class="action-row">
+                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Dabei</button>
+                <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Logik zum automatischen Berechnen und Zeichnen des Diagramms
+function renderPerformanceChart(perfData) {
+    const svg = document.getElementById('performance-svg');
+    svg.innerHTML = ''; // Ladehinweis entfernen
+    
+    if(!perfData || perfData.length === 0) {
+        svg.innerHTML = '<text x="500" y="150" fill="white" text-anchor="middle">Noch keine Performance-Daten eingetragen.</text>';
+        return;
+    }
+
+    const width = 1000;
+    const height = 260;
+    const paddingLeft = 60;
+    const paddingRight = 40;
+    const paddingTop = 30;
+    const paddingBottom = 40;
+
+    // Skalierung ermitteln (Dynamische Y-Achse basierend auf den Dart-Averages)
+    const averages = perfData.map(d => d.avg);
+    let maxAvg = Math.max(...averages, 60); // Mindestens bis 60 skalieren
+    let minAvg = Math.min(...averages, 40); // Mindestens ab 40 starten
+    maxAvg += 3; // Puffer oben
+    minAvg -= 3; // Puffer unten
+    
+    const avgRange = maxAvg - minAvg;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+
+    // Punkte mathematisch für SVG umrechnen
+    let points = [];
+    let stepX = perfData.length > 1 ? chartWidth / (perfData.length - 1) : chartWidth;
+
+    perfData.forEach((d, i) => {
+        let x = paddingLeft + (i * stepX);
+        // Da im SVG 0 oben ist, müssen wir den Wert von der Höhe abziehen
+        let y = paddingTop + chartHeight - ((d.avg - minAvg) / avgRange * chartHeight);
+        points.push({x: x, y: y, monat: d.monat, avg: d.avg});
+    });
+
+    // 1. Gitternetzlinien im Hintergrund zeichnen (Y-Achse)
+    for(let scale = 0; scale <= 4; scale++) {
+        let val = minAvg + (avgRange * (scale / 4));
+        let yPos = paddingTop + chartHeight - (scale / 4 * chartHeight);
+        
+        // Linie
+        let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", paddingLeft);
+        line.setAttribute("y1", yPos);
+        line.setAttribute("x2", width - paddingRight);
+        line.setAttribute("y2", yPos);
+        line.setAttribute("stroke", "rgba(255,255,255,0.05)");
+        svg.appendChild(line);
+
+        // Achsen-Beschriftung links (z.B. "45.5 AVG")
+        let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt.setAttribute("x", paddingLeft - 15);
+        txt.setAttribute("y", yPos + 5);
+        txt.setAttribute("fill", "var(--text-dim)");
+        txt.setAttribute("font-size", "12");
+        txt.setAttribute("text-anchor", "end");
+        txt.textContent = val.toFixed(1);
+        svg.appendChild(txt);
+    }
+
+    // 2. Pfade für Linie und Fläche generieren
+    let polylinePoints = points.map(p => `${p.x},${p.y}`).join(' ');
+    let areaPoints = `${paddingLeft},${paddingTop + chartHeight} ` + polylinePoints + ` ${points[points.length-1].x},${paddingTop + chartHeight} Z`;
+
+    // Fläche einfügen
+    let areaPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    areaPath.setAttribute("class", "area-fill");
+    areaPath.setAttribute("d", "M " + areaPoints);
+    svg.appendChild(areaPath);
+
+    // Linie einfügen
+    let linePoly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    linePoly.setAttribute("class", "line-stroke");
+    linePoly.setAttribute("points", polylinePoints);
+    svg.appendChild(linePoly);
+
+    // 3. Datenpunkte (Kreise), Monatsnamen und Zahlenwerte zeichnen
+    points.forEach(p => {
+        // Kreis
+        let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("class", "chart-dot");
+        circle.setAttribute("cx", p.x);
+        circle.setAttribute("cy", p.y);
+        circle.setAttribute("r", "6");
+        svg.appendChild(circle);
+
+        // Wert über dem Punkt
+        let valTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        valTxt.setAttribute("class", "chart-value-text");
+        valTxt.setAttribute("x", p.x);
+        valTxt.setAttribute("y", p.y - 12);
+        valTxt.textContent = p.avg.toFixed(1);
+        svg.appendChild(valTxt);
+
+        // Monatsname unten an der X-Achse
+        let mTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        mTxt.setAttribute("x", p.x);
+        mTxt.setAttribute("y", height - 10);
+        mTxt.setAttribute("fill", "var(--text-dim)");
+        mTxt.setAttribute("font-size", "13");
+        mTxt.setAttribute("text-anchor", "middle");
+        mTxt.textContent = p.monat.toUpperCase();
+        svg.appendChild(mTxt);
+    });
 }
 
 async function updateStatus(matchId, status) {
@@ -346,13 +455,11 @@ async function updateStatus(matchId, status) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: matchId, spieler: currentUser, status: status })
     });
-    
-    // Kleiner visueller Buffer vor dem Neuladen der Daten
-    setTimeout(renderDashboard, 400);
+    setTimeout(initApp, 400);
 }
 
 // Start sequence
-if(currentUser) renderDashboard();
+if(currentUser) initApp();
 </script>
 
 </body>
