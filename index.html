@@ -503,8 +503,8 @@ function renderDoppelTable(doppelData, container) {
     doppelData.forEach(row => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${row.spieler1}</td>
-            <td>${row.spieler2}</td>
+            <td>${formatPlayerName(row.spieler1)}</td>
+            <td>${formatPlayerName(row.spieler2)}</td>
             <td style="text-align: center;">${row.spiele}</td>
             <td style="text-align: center; font-weight: bold; color: var(--zusage);">${row.siege}</td>
             <td style="text-align: center; font-weight: bold; color: var(--absage);">${row.niederlagen}</td>
