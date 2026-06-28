@@ -108,7 +108,7 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .personal-card { background: linear-gradient(135deg, #0c1626 0%, #050a14 100%); border: 1px solid var(--gold); border-radius: 12px; padding: 25px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px; }
 @media (min-width: 768px) { .personal-card { flex-direction: row; justify-content: space-between; align-items: center; } }
 .personal-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
-@media (min-width: 768px) { .personal-stats-grid { grid-template-columns: repeat(4, 1fr); width: auto; gap: 30px; } }
+@media (min-width: 768px) { .personal-stats-grid { grid-template-columns: repeat(5, 1fr); width: auto; gap: 20px; } }
 .stat-box { background: rgba(255,255,255,0.02); padding: 10px 15px; border-radius: 6px; border-left: 3px solid var(--gold); }
 .stat-box .stat-val { font-size: 22px; font-weight: bold; color: var(--white); font-family: 'Poppins'; }
 .stat-box .stat-lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
@@ -121,8 +121,8 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 }
 .kader-left { display: flex; align-items: center; gap: 15px; }
 .kader-rank { font-family: 'Poppins'; font-weight: bold; color: var(--gold); font-size: 18px; width: 25px; }
-.kader-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
-@media (min-width: 768px) { .kader-details { background: none; padding: 0; gap: 30px; display: flex; } }
+.kader-details { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
+@media (min-width: 768px) { .kader-details { background: none; padding: 0; gap: 25px; display: flex; } }
 .kader-stat-entry { display: flex; flex-direction: column; }
 @media (min-width: 768px) { .kader-stat-entry { align-items: center; } }
 .kader-stat-entry .val { font-size: 16px; font-weight: bold; color: var(--white); }
@@ -198,8 +198,7 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
         </div>
     </div>
 
-    <div id="personal-card-container" style="display:none;">
-        </div>
+    <div id="personal-card-container" style="display:none;"></div>
 
     <h2 class="slide-title">Spieltags-Planer</h2>
     <div class="content-area">
@@ -214,7 +213,7 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 </div>
 
 <div class="slide-container" id="slide4">
-    <h2 class="slide-title">Kader Übersicht</h2>
+    <h2 class="slide-title">Kader Übersicht (nach Match-Score)</h2>
     <div class="content-area">
         <div id="kader-list-target" class="kader-list">
             <p style="text-align:center; padding:20px;">Lade Statistiken...</p>
@@ -353,7 +352,7 @@ function renderKaderAndPersonalCard(stats, container) {
     const cleanCurrentUser = currentUser.replace(' (TC 1)', '').trim();
 
     stats.forEach((p, index) => {
-        // 1. Rendere Zeile für die Kader-Rangliste
+        // Rangliste generieren
         const row = document.createElement('div');
         row.className = 'kader-row';
         row.innerHTML = `
@@ -362,15 +361,16 @@ function renderKaderAndPersonalCard(stats, container) {
                 <div>${formatPlayerName(p.spieler)}</div>
             </div>
             <div class="kader-details">
+                <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(1)}%</span><span class="lbl">Quote</span></div>
                 <div class="kader-stat-entry"><span class="val">${p.avg.toFixed(1)}</span><span class="lbl">AVG</span></div>
                 <div class="kader-stat-entry"><span class="val">${p.spiele}</span><span class="lbl">Spiele</span></div>
-                <div class="kader-stat-entry"><span class="val" style="color:var(--zusage);">${p.gewonnen}</span><span class="lbl">Gew</span></div>
-                <div class="kader-stat-entry"><span class="val" style="color:var(--absage);">${p.verloren}</span><span class="lbl">Verl</span></div>
+                <div class="kader-stat-entry"><span class="val" style="color:var(--zusage);">${p.gewonnen}</span><span class="lbl">G</span></div>
+                <div class="kader-stat-entry"><span class="val" style="color:var(--absage);">${p.verloren}</span><span class="lbl">V</span></div>
             </div>
         `;
         container.appendChild(row);
 
-        // 2. Prüfe, ob das der eingeloggte Spieler ist -> Wenn ja, baue seine persönliche Visitenkarte
+        // Eigene Profil-Kachel befüllen
         if (p.spieler.toLowerCase() === cleanCurrentUser.toLowerCase()) {
             personalContainer.style.display = 'block';
             personalContainer.innerHTML = `
@@ -381,6 +381,7 @@ function renderKaderAndPersonalCard(stats, container) {
                         <p style="font-size: 13px;"><i class="fa-solid fa-star" style="color:var(--gold);"></i> Highlights: ${p.highlights || 'Keine Einträge'}</p>
                     </div>
                     <div class="personal-stats-grid">
+                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(1)}%</div><div class="stat-lbl">Match-Score</div></div>
                         <div class="stat-box"><div class="stat-val">${p.avg.toFixed(1)}</div><div class="stat-lbl">Saison AVG</div></div>
                         <div class="stat-box"><div class="stat-val">${p.spiele}</div><div class="stat-lbl">Matches</div></div>
                         <div class="stat-box"><div class="stat-val" style="color:var(--zusage);">${p.gewonnen}</div><div class="stat-lbl">Siege</div></div>
