@@ -455,7 +455,7 @@ function renderKaderAndPersonalCard(stats, container) {
                         <div>${formatPlayerName(p.spieler)}</div>
                     </div>
                     <div class="kader-details">
-                        <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(1)}%</span><span class="lbl">Quote</span></div>
+                        <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(2)}%</span><span class="lbl">Quote</span></div>
                         <div class="kader-stat-entry"><span class="val">${p.avg.toFixed(2)}</span><span class="lbl">AVG</span></div>
                         <div class="kader-stat-entry"><span class="val">${p.spiele}</span><span class="lbl">Spiele</span></div>
                         <div class="kader-stat-entry"><span class="val" style="color:var(--zusage);">${p.gewonnen}</span><span class="lbl">G</span></div>
@@ -477,7 +477,7 @@ function renderKaderAndPersonalCard(stats, container) {
                         <p style="font-size: 13px;"><i class="fa-solid fa-star" style="color:var(--gold);"></i> Highlights: ${p.highlights || 'Keine Einträge'}</p>
                     </div>
                     <div class="personal-stats-grid">
-                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(1)}%</div><div class="stat-lbl">Match-Score</div></div>
+                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(2)}%</div><div class="stat-lbl">Match-Score</div></div>
                         <div class="stat-box"><div class="stat-val">${p.avg.toFixed(2)}</div><div class="stat-lbl">Saison AVG</div></div>
                         <div class="stat-box"><div class="stat-val">${p.matches || p.spiele}</div><div class="stat-lbl">Matches</div></div>
                         <div class="stat-box"><div class="stat-val" style="color:var(--zusage);">${p.gewonnen}</div><div class="stat-lbl">Siege</div></div>
