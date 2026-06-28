@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Kapellen 3 - Squad App</title>
+    <title>TV Kapellen 3 - Spieltags-Planer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@ h1 { font-size: clamp(40px, 8vw, 84px); line-height: 1.1; margin-bottom: 15px; }
 }
 p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 
-/* DASHBOARD GRID - Untereinander auf Mobilgeräten, 3 Spalten am PC */
+/* PLANER GRID */
 .app-grid { 
   display: grid; 
   grid-template-columns: 1fr; 
@@ -136,7 +136,7 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 .app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: #000; }
 .app-btn.active-no { background: var(--absage); border-color: var(--absage); color: #fff; }
 
-/* MISSION TILES - Erzwingt Stapeln untereinander auf Mobilgeräten */
+/* MISSION TILES */
 .tiled-content { 
   display: flex; 
   flex-direction: column; 
@@ -148,18 +148,6 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 
 .tile { background: var(--card-bg); padding: 30px; border-radius: 8px; border-top: 4px solid var(--gold); flex: 1; }
 .tile i { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
-
-/* PERFORMANCE CHART */
-.area-chart-container { 
-  width: 100%; height: 250px; margin-top: 20px; 
-  background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; 
-}
-@media (min-width: 1281px) { .area-chart-container { height: 400px; } }
-.area-chart-svg { width: 100%; height: 100%; overflow: visible; }
-.area-fill { fill: rgba(0, 116, 217, 0.15); }
-.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 3; }
-.chart-dot { fill: var(--gold); stroke: #fff; stroke-width: 1.5; }
-.chart-value-text { fill: #fff; font-size: 10px; font-weight: bold; text-anchor: middle; }
 
 /* CAPTAIN HIGHLIGHT */
 .captain-badge { background: var(--gold); color: #000; padding: 1px 4px; font-size: 9px; font-weight: bold; border-radius: 2px; vertical-align: middle; }
@@ -230,7 +218,7 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
         </div>
     </div>
 
-    <h2 class="slide-title">Squad-Dashboard</h2>
+    <h2 class="slide-title">Spieltags-Planer</h2>
     <div class="content-area">
         <div id="match-grid" class="app-grid">
             <p style="text-align:center; padding-top:20px;">Lade Spieldaten...</p>
@@ -242,19 +230,7 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
     </div>
 </div>
 
-<div class="slide-container" id="slide4">
-    <h2 class="slide-title">Performance Trend</h2>
-    <div class="content-area">
-        <p style="margin-bottom: 10px;">Live Team-Average Entwicklung:</p>
-        <div class="area-chart-container">
-            <svg class="area-chart-svg" viewBox="0 0 1000 300" id="performance-svg">
-                <text x="500" y="150" fill="var(--text-dim)" text-anchor="middle">Warte auf Daten...</text>
-            </svg>
-        </div>
-    </div>
-</div>
-
-<div class="slide-container" id="slide5" style="justify-content: center; text-align: center;">
+<div class="slide-container" id="slide4" style="justify-content: center; text-align: center;">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center;">
         <div style="max-width: 800px;">
             <i class="fa-solid fa-quote-left" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
@@ -319,7 +295,6 @@ async function initApp() {
         let data = await response.json();
         
         renderDashboard(data.spieltage, container);
-        renderPerformanceChart(data.performance);
         
     } catch (err) {
         container.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
@@ -328,7 +303,11 @@ async function initApp() {
 
 function renderDashboard(matches, container) {
     container.innerHTML = '';
-    matches.forEach(m => {
+    
+    // NIMMT NUR DIE ERSTEN 5 SPIELTAGE AUS GOOGLE SHEETS
+    const nextMatches = matches.slice(0, 5);
+    
+    nextMatches.forEach(m => {
         const card = document.createElement('div');
         card.className = 'match-card';
         
@@ -356,44 +335,6 @@ function renderDashboard(matches, container) {
             </div>
         `;
         container.appendChild(card);
-    });
-}
-
-function renderPerformanceChart(perfData) {
-    const svg = document.getElementById('performance-svg');
-    svg.innerHTML = '';
-    if(!perfData || perfData.length === 0) {
-        svg.innerHTML = '<text x="500" y="150" fill="white" text-anchor="middle">Keine Daten</text>';
-        return;
-    }
-
-    const width = 1000;
-    const height = 300;
-    const pL = 50, pR = 40, pT = 40, pB = 40;
-    const chartW = width - pL - pR;
-    const chartH = height - pT - pB;
-
-    const avgs = perfData.map(d => d.avg);
-    let max = Math.max(...avgs, 60) + 2;
-    let min = Math.min(...avgs, 40) - 2;
-    const range = max - min;
-
-    let points = perfData.map((d, i) => {
-        let x = pL + (i * (chartW / (perfData.length - 1 || 1)));
-        let y = pT + chartH - ((d.avg - min) / range * chartH);
-        return {x, y, monat: d.monat, avg: d.avg};
-    });
-
-    let poly = points.map(p => `${p.x},${p.y}`).join(' ');
-    let area = `${pL},${pT+chartH} ${poly} ${points[points.length-1].x},${pT+chartH} Z`;
-
-    svg.innerHTML += `<path class="area-fill" d="M ${area}" />`;
-    svg.innerHTML += `<polyline class="line-stroke" points="${poly}" />`;
-
-    points.forEach(p => {
-        svg.innerHTML += `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="5" />`;
-        svg.innerHTML += `<text class="chart-value-text" x="${p.x}" y="${p.y-12}">${p.avg.toFixed(1)}</text>`;
-        svg.innerHTML += `<text x="${p.x}" y="${height-10}" fill="var(--text-dim)" font-size="12" text-anchor="middle">${p.monat.toUpperCase()}</text>`;
     });
 }
 
