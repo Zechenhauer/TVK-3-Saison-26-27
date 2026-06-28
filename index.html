@@ -304,10 +304,8 @@ async function initApp() {
 function renderDashboard(matches, container) {
     container.innerHTML = '';
     
-    // NIMMT NUR DIE ERSTEN 5 SPIELTAGE AUS GOOGLE SHEETS
-    const nextMatches = matches.slice(0, 5);
-    
-    nextMatches.forEach(m => {
+    // ZEIGT JETZT DIE KOMPLETTE LISTE AUS GOOGLE SHEETS AN (STEUERUNG ÜBER DEINE TABELLE)
+    matches.forEach(m => {
         const card = document.createElement('div');
         card.className = 'match-card';
         
