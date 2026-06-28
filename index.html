@@ -44,7 +44,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 50px 60px;
+  padding: 60px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
   border: 1px solid rgba(212, 175, 55, 0.1);
 }
@@ -64,47 +64,37 @@ body {
 
 h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
 h1 { font-size: 84px; line-height: 1.1; margin-bottom: 10px; }
-.slide-title { font-size: 32px; font-weight: 400; margin-bottom: 25px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
+.slide-title { font-size: 36px; font-weight: 400; margin-bottom: 40px; border-left: 6px solid var(--gold); padding-left: 20px; text-transform: uppercase; letter-spacing: 2px; }
 p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 
 .title-layout { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 .title-layout span { color: var(--gold); }
 
-.content-area { flex-grow: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+.content-area { flex-grow: 1; width: 100%; }
 
-.tiled-content { display: flex; gap: 30px; width: 100%; height: 100%; }
-.tile { background: var(--card-bg); padding: 40px; border-radius: 4px; border-top: 4px solid var(--gold); flex: 1; display: flex; flex-direction: column; gap: 15px; }
-.tile i { font-size: 48px; color: var(--gold); }
-.tile h3 { font-size: 24px; color: var(--white); }
-
-/* AREA CHART TREND (COMPACT) */
-.area-chart-container { width: 100%; height: 150px; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02); }
+/* AREA CHART TREND (FULL SLIDE) */
+.area-chart-container { width: 100%; height: 400px; margin-top: 20px; position: relative; }
 .area-chart-svg { width: 100%; height: 100%; overflow: visible; }
-.area-fill { fill: rgba(0, 116, 217, 0.12); transition: all 0.5s ease; }
-.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 3; transition: all 0.5s ease; }
-.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 1.5; }
-.chart-value-text { fill: var(--white); font-size: 11px; font-weight: bold; text-anchor: middle; }
+.area-fill { fill: rgba(0, 116, 217, 0.15); transition: all 0.5s ease; }
+.line-stroke { fill: none; stroke: var(--accent-blue); stroke-width: 4; transition: all 0.5s ease; }
+.chart-dot { fill: var(--gold); stroke: var(--white); stroke-width: 2; }
+.chart-value-text { fill: var(--white); font-size: 14px; font-weight: bold; text-anchor: middle; }
 
-/* HIGHLIGHTED NUMBERS */
-.highlight-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; text-align: center; }
-.highlight-item .number { font-size: 120px; font-weight: 700; color: var(--gold); font-family: 'Poppins'; line-height: 1; }
-.highlight-item .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); }
-
-/* APP SLIDE SPECIFIC */
-.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 320px; overflow-y: auto; padding-right: 10px; }
+/* APP GRID (DASHBOARD) */
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: 500px; overflow-y: auto; padding-right: 10px; }
 .app-grid::-webkit-scrollbar { width: 6px; }
 .app-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 15px; position: relative;}
+.match-card { background: var(--card-bg); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 20px; position: relative; }
 
 /* Heim / Auswärts Badge */
-.game-loc-badge { position: absolute; top: 12px; right: 12px; padding: 3px 7px; font-size: 11px; font-weight: bold; border-radius: 4px; }
+.game-loc-badge { position: absolute; top: 20px; right: 20px; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
 .loc-h { background: rgba(0, 116, 217, 0.2); color: #0074D9; border: 1px solid #0074D9; }
 .loc-a { background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
 
-.match-card h4 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
-.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 25px; }
-.match-card .match-date { font-size: 12px; color: var(--gold); margin-bottom: 10px; font-weight: bold; }
-.match-status { font-size: 12px; margin-bottom: 12px; line-height: 1.4; }
+.match-card h4 { font-size: 12px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+.match-card .match-title { font-size: 18px; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 60px; }
+.match-card .match-date { font-size: 13px; color: var(--gold); margin-bottom: 15px; font-weight: bold; }
+.match-status { font-size: 12px; margin-bottom: 15px; }
 .match-status strong { display: block; color: var(--white); margin-bottom: 2px; }
 .status-yes { color: var(--zusage); }
 .status-no { color: var(--absage); }
@@ -119,6 +109,10 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 #onboarding { position: absolute; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .onboard-card { background: var(--card-bg); padding: 50px; border-radius: 12px; border: 1px solid var(--gold); width: 450px; text-align: center; }
 .onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 4px; margin: 20px 0; font-size: 16px; }
+
+.highlight-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; text-align: center; }
+.highlight-item .number { font-size: 120px; font-weight: 700; color: var(--gold); font-family: 'Poppins'; line-height: 1; }
+.highlight-item .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); }
     </style>
 </head>
 <body>
@@ -177,17 +171,12 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
         </div>
     </div>
 
-    <h2 class="slide-title">Squad-Dashboard & Performance 2026/27</h2>
+    <h2 class="slide-title">Squad-Dashboard 2026/27</h2>
     <div class="content-area">
-        <div id="match-grid" class="app-grid"></div>
-        
-        <div class="area-chart-container">
-            <svg class="area-chart-svg" viewBox="0 0 1160 130" id="performance-svg">
-                <text x="580" y="70" fill="var(--text-dim)" text-anchor="middle" id="chart-loading">Lade Live-Performance...</text>
-            </svg>
+        <div id="match-grid" class="app-grid">
+            <p style="text-align:center; padding-top:50px;">Verbinde mit Google Sheets...</p>
         </div>
-
-        <div style="margin-top: 10px; border-top: 1px solid #222; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px;">
+        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; display: flex; justify-content: space-between;">
             <span id="active-user" style="color: var(--gold); font-weight: 700;"></span>
             <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer;">Profil wechseln</button>
         </div>
@@ -195,6 +184,18 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
 </div>
 
 <div class="slide-container" id="slide4">
+    <h2 class="slide-title">Performance Trend Analyse</h2>
+    <div class="content-area">
+        <p>Tatsächliche Entwicklung des Team-Averages im Saisonverlauf (Live aus Google Sheets).</p>
+        <div class="area-chart-container">
+            <svg class="area-chart-svg" viewBox="0 0 1160 400" id="performance-svg">
+                <text x="580" y="200" fill="var(--text-dim)" text-anchor="middle">Warte auf Daten...</text>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5">
     <h2 class="slide-title">Saison in Zahlen</h2>
     <div class="content-area">
         <div class="highlight-grid">
@@ -214,7 +215,7 @@ p { font-size: 18px; line-height: 1.6; color: var(--text-dim); }
     </div>
 </div>
 
-<div class="slide-container" id="slide5">
+<div class="slide-container" id="slide6">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 100%;">
         <div style="text-align: center; max-width: 800px;">
             <i class="fa-solid fa-quote-left" style="font-size: 60px; color: var(--gold); margin-bottom: 30px;"></i>
@@ -258,7 +259,6 @@ async function initApp() {
     document.getElementById('active-user').innerHTML = "Eingeloggt als: " + formatPlayerName(currentUser);
     
     const container = document.getElementById('match-grid');
-    container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding-top: 50px;">Lade Spieldaten aus Google Sheets...</p>';
 
     try {
         let response = await fetch(GOOGLE_SCRIPT_URL);
@@ -268,7 +268,7 @@ async function initApp() {
         renderPerformanceChart(data.performance);
         
     } catch (err) {
-        container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:red; padding-top: 50px;">Fehler beim Laden. Bitte prüfe deine GOOGLE_SCRIPT_URL.</p>';
+        container.innerHTML = '<p style="text-align:center; color:red; padding-top:50px;">Fehler beim Laden. Prüfe die URL.</p>';
     }
 }
 
@@ -280,11 +280,10 @@ function renderDashboard(matches, container) {
         
         const isYes = m.zusagen.includes(currentUser);
         const isNo = m.absagen.includes(currentUser);
-
         const formattedZusagen = m.zusagen.map(formatPlayerName);
         const formattedAbsagen = m.absagen.map(formatPlayerName);
 
-        // Ort-Formatierung für das Abzeichen
+        // Ort-Formatierung
         const isHeim = m.ort.trim().toUpperCase() === 'H';
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
@@ -293,7 +292,7 @@ function renderDashboard(matches, container) {
             <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
             <h4>Spieltag ${m.id}</h4>
             <div class="match-title">vs. ${m.gegner || 'Noch offen'}</div>
-            <div class="match-date"><i class="fa-regular fa-calendar"></i> ${m.datum || 'Termin offen'} um ${m.uhrzeit} Uhr</div>
+            <div class="match-date"><i class="fa-regular fa-clock"></i> ${m.datum || 'Termin offen'} - ${m.uhrzeit} Uhr</div>
             <div class="match-status">
                 <span class="status-yes"><strong>👍 Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Noch niemand</i>'}</span>
                 <span class="status-no"><strong>👎 Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine</i>'}</span>
@@ -312,22 +311,22 @@ function renderPerformanceChart(perfData) {
     svg.innerHTML = '';
     
     if(!perfData || perfData.length === 0) {
-        svg.innerHTML = '<text x="580" y="70" fill="white" text-anchor="middle">Noch keine Performance-Daten eingetragen.</text>';
+        svg.innerHTML = '<text x="580" y="200" fill="white" text-anchor="middle">Keine Performance-Daten gefunden.</text>';
         return;
     }
 
     const width = 1160;
-    const height = 130;
-    const paddingLeft = 50;
-    const paddingRight = 40;
-    const paddingTop = 25;
-    const paddingBottom = 25;
+    const height = 400;
+    const paddingLeft = 80;
+    const paddingRight = 60;
+    const paddingTop = 50;
+    const paddingBottom = 60;
 
     const averages = perfData.map(d => d.avg);
     let maxAvg = Math.max(...averages, 60);
     let minAvg = Math.min(...averages, 40);
-    maxAvg += 2;
-    minAvg -= 2;
+    maxAvg += 4;
+    minAvg -= 4;
     
     const avgRange = maxAvg - minAvg;
     const chartWidth = width - paddingLeft - paddingRight;
@@ -342,23 +341,24 @@ function renderPerformanceChart(perfData) {
         points.push({x: x, y: y, monat: d.monat, avg: d.avg});
     });
 
-    for(let scale = 0; scale <= 2; scale++) {
-        let val = minAvg + (avgRange * (scale / 2));
-        let yPos = paddingTop + chartHeight - (scale / 2 * chartHeight);
+    // Gitternetz
+    for(let scale = 0; scale <= 4; scale++) {
+        let val = minAvg + (avgRange * (scale / 4));
+        let yPos = paddingTop + chartHeight - (scale / 4 * chartHeight);
         
         let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", paddingLeft);
         line.setAttribute("y1", yPos);
         line.setAttribute("x2", width - paddingRight);
         line.setAttribute("y2", yPos);
-        line.setAttribute("stroke", "rgba(255,255,255,0.04)");
+        line.setAttribute("stroke", "rgba(255,255,255,0.05)");
         svg.appendChild(line);
 
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        txt.setAttribute("x", paddingLeft - 12);
-        txt.setAttribute("y", yPos + 4);
+        txt.setAttribute("x", paddingLeft - 20);
+        txt.setAttribute("y", yPos + 5);
         txt.setAttribute("fill", "var(--text-dim)");
-        txt.setAttribute("font-size", "10");
+        txt.setAttribute("font-size", "14");
         txt.setAttribute("text-anchor", "end");
         txt.textContent = val.toFixed(1);
         svg.appendChild(txt);
@@ -382,21 +382,21 @@ function renderPerformanceChart(perfData) {
         circle.setAttribute("class", "chart-dot");
         circle.setAttribute("cx", p.x);
         circle.setAttribute("cy", p.y);
-        circle.setAttribute("r", "4");
+        circle.setAttribute("r", "7");
         svg.appendChild(circle);
 
         let valTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         valTxt.setAttribute("class", "chart-value-text");
         valTxt.setAttribute("x", p.x);
-        valTxt.setAttribute("y", p.y - 8);
+        valTxt.setAttribute("y", p.y - 15);
         valTxt.textContent = p.avg.toFixed(1);
         svg.appendChild(valTxt);
 
         let mTxt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         mTxt.setAttribute("x", p.x);
-        mTxt.setAttribute("y", height - 4);
+        mTxt.setAttribute("y", height - 20);
         mTxt.setAttribute("fill", "var(--text-dim)");
-        mTxt.setAttribute("font-size", "11");
+        mTxt.setAttribute("font-size", "14");
         mTxt.setAttribute("text-anchor", "middle");
         mTxt.textContent = p.monat.toUpperCase();
         svg.appendChild(mTxt);
