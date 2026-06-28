@@ -127,6 +127,9 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 .status-yes { color: var(--zusage); margin-bottom: 8px; display: block; }
 .status-no { color: var(--absage); display: block; }
 
+/* Spieler-Namen Styling */
+.player-name { font-weight: bold; display: inline-block; }
+
 .action-row { display: flex; gap: 10px; }
 .app-btn { 
   flex: 1; padding: 12px; border: 1px solid #333; border-radius: 6px; 
@@ -150,8 +153,7 @@ p { font-size: clamp(14px, 4vw, 18px); color: var(--text-dim); }
 .tile i { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
 
 /* CAPTAIN HIGHLIGHT */
-.captain-badge { background: var(--gold); color: #000; padding: 1px 4px; font-size: 9px; font-weight: bold; border-radius: 2px; vertical-align: middle; }
-.captain-highlight { color: var(--gold) !important; font-weight: bold; }
+.captain-badge { background: var(--gold); color: #000; padding: 1px 4px; font-size: 9px; font-weight: bold; border-radius: 2px; vertical-align: middle; margin-left: 2px; }
 
 /* LOGIN ONBOARDING */
 #onboarding { position: fixed; inset: 0; background: var(--navy); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
@@ -261,11 +263,31 @@ function logout() {
     location.reload();
 }
 
+// FORMATIERT DIE FARBEN DER SPIELER
 function formatPlayerName(name) {
-    if (name.includes("Jürgen Schützendorf")) {
-        return `<span class="captain-highlight">Jürgen Schützendorf <span class="captain-badge">TC 1</span></span>`;
+    const cleanName = name.replace(' (TC 1)', '').trim();
+    
+    // Farbtabelle für die Spieler definieren
+    const playerColors = {
+        "Jürgen Schützendorf": "#FFD700", // Gold
+        "Ludger Schledorn": "#FF6B6B",    // Pastellrot
+        "Markus Lenz": "#4DABF7",         // Hellblau
+        "Niklas Weichert": "#51CF66",     // Hellgrün
+        "Andreas Denner": "#FCC419",      // Gelb
+        "Markus Ginsel": "#FF922B",       // Orange
+        "Lars Neutag": "#845EF7",         // Lila
+        "Wolfram Senger": "#A9E34B",      // Limette
+        "Dominik Helmke": "#20C997",      // Türkis
+        "Michael Müller": "#FF8787"       // Rosa
+    };
+
+    const color = playerColors[cleanName] || "#e2e8f0"; // Fallback-Farbe, falls Name nicht gematcht wird
+
+    if (cleanName === "Jürgen Schützendorf") {
+        return `<span class="player-name" style="color: ${color};">Jürgen Schützendorf <span class="captain-badge">TC 1</span></span>`;
     }
-    return name;
+    
+    return `<span class="player-name" style="color: ${color};">${cleanName}</span>`;
 }
 
 function formatGermanDate(dateStr) {
@@ -304,7 +326,6 @@ async function initApp() {
 function renderDashboard(matches, container) {
     container.innerHTML = '';
     
-    // ZEIGT JETZT DIE KOMPLETTE LISTE AUS GOOGLE SHEETS AN (STEUERUNG ÜBER DEINE TABELLE)
     matches.forEach(m => {
         const card = document.createElement('div');
         card.className = 'match-card';
