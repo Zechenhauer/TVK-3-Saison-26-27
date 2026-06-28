@@ -113,7 +113,7 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .stat-box .stat-val { font-size: 22px; font-weight: bold; color: var(--white); font-family: 'Poppins'; }
 .stat-box .stat-lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
 
-/* KADER LISTE (MOBILE RESPONSE) */
+/* KADER LISTE */
 .kader-list { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
 .kader-row { display: flex; flex-direction: column; background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); gap: 10px; }
 @media (min-width: 768px) { 
@@ -127,6 +127,13 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 @media (min-width: 768px) { .kader-stat-entry { align-items: center; } }
 .kader-stat-entry .val { font-size: 16px; font-weight: bold; color: var(--white); }
 .kader-stat-entry .lbl { font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
+
+/* LIGA-TABELLE STYLE */
+.liga-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; background: var(--card-bg); border-radius: 8px; overflow: hidden; }
+.liga-table th { background: rgba(255,255,255,0.03); font-family: 'Poppins'; font-weight: bold; color: var(--gold); text-transform: uppercase; font-size: 11px; padding: 12px 10px; text-align: left; border-bottom: 2px solid var(--gold-dim); }
+.liga-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-main); }
+.liga-table tr.own-team { background: rgba(212, 175, 55, 0.12); font-weight: bold; border-left: 4px solid var(--gold); }
+.liga-table tr.own-team td { color: var(--white); }
 
 /* MISSION TILES */
 .tiled-content { display: flex; flex-direction: column; gap: 20px; }
@@ -221,6 +228,32 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
     </div>
 </div>
 
+<div class="slide-container" id="slideLiga">
+    <h2 class="slide-title">Offizielle Liga-Tabelle</h2>
+    <div class="content-area" style="overflow-x: auto;">
+        <table class="liga-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px; text-align: center;">Pl.</th>
+                    <th>Mannschaft</th>
+                    <th style="width: 35px; text-align: center;">Sp</th>
+                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
+                    <th style="width: 30px; text-align: center;">U</th>
+                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
+                    <th style="width: 40px; text-align: center;">Pkt</th>
+                    <th style="width: 60px; text-align: center;">Sets</th>
+                    <th style="width: 60px; text-align: center;">Legs</th>
+                </tr>
+            </thead>
+            <tbody id="liga-table-body">
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 20px;">Lade Ligatabelle...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="slide-container" id="slide5" style="justify-content: center; text-align: center;">
     <div class="content-area" style="display: flex; align-items: center; justify-content: center;">
         <div style="max-width: 800px;">
@@ -235,7 +268,7 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 let currentUser = localStorage.getItem('tvk3_user_26_27_mobile');
 
 // DEINE APPS SCRIPT URL HIER EINTRAGEN
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwq3k6-87Hb0HqFLsn2j4Xc1K_QS1Zh1-k_qBUzMEyM0ZfPfbQtH3dyyHlDosvSN3Eo5A/exec'; 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwq3k6-87Hb0HqFLsn2j4Xc1K_QS1Zh1-k_qBUzMEyM0ZfPfbQtH3dyyHlDosvSN3Eo5A/exec';
 
 function confirmLogin() {
     const sel = document.getElementById('player-select').value;
@@ -296,6 +329,7 @@ async function initApp() {
     
     const matchContainer = document.getElementById('match-grid');
     const kaderContainer = document.getElementById('kader-list-target');
+    const ligaContainer = document.getElementById('liga-table-body');
 
     try {
         let response = await fetch(GOOGLE_SCRIPT_URL);
@@ -303,10 +337,12 @@ async function initApp() {
         
         renderDashboard(data.spieltage, matchContainer);
         renderKaderAndPersonalCard(data.statistiken, kaderContainer);
+        renderLigaTable(data.ligatabelle, ligaContainer);
         
     } catch (err) {
         matchContainer.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
         kaderContainer.innerHTML = '<p style="text-align:center; color:red;">Verbindungsfehler!</p>';
+        ligaContainer.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
     }
 }
 
@@ -325,7 +361,6 @@ function renderDashboard(matches, container) {
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
-        // Standardmäßig zeigen wir Buttons
         let actionContent = `
             <div class="action-row">
                 <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
@@ -333,7 +368,6 @@ function renderDashboard(matches, container) {
             </div>
         `;
 
-        // Bei eingetragenem Ergebnis in Spalte H: Zeige Ergebnis-Banner statt Buttons
         if (m.ergebnis && m.ergebnis !== "") {
             actionContent = `
                 <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; font-family: 'Poppins'; color: var(--white); letter-spacing: 1px;">
@@ -366,7 +400,6 @@ function renderKaderAndPersonalCard(stats, container) {
     const cleanCurrentUser = currentUser.replace(' (TC 1)', '').trim();
 
     stats.forEach((p, index) => {
-        // Rangliste generieren
         const row = document.createElement('div');
         row.className = 'kader-row';
         row.innerHTML = `
@@ -384,7 +417,6 @@ function renderKaderAndPersonalCard(stats, container) {
         `;
         container.appendChild(row);
 
-        // Eigene Profil-Kachel befüllen
         if (p.spieler.toLowerCase() === cleanCurrentUser.toLowerCase()) {
             personalContainer.style.display = 'block';
             personalContainer.innerHTML = `
@@ -397,13 +429,43 @@ function renderKaderAndPersonalCard(stats, container) {
                     <div class="personal-stats-grid">
                         <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(1)}%</div><div class="stat-lbl">Match-Score</div></div>
                         <div class="stat-box"><div class="stat-val">${p.avg.toFixed(1)}</div><div class="stat-lbl">Saison AVG</div></div>
-                        <div class="stat-box"><div class="stat-val">${p.spiele}</div><div class="stat-lbl">Matches</div></div>
+                        <div class="stat-box"><div class="stat-val">${p.matches || p.spiele}</div><div class="stat-lbl">Matches</div></div>
                         <div class="stat-box"><div class="stat-val" style="color:var(--zusage);">${p.gewonnen}</div><div class="stat-lbl">Siege</div></div>
                         <div class="stat-box"><div class="stat-val" style="color:var(--absage);">${p.verloren}</div><div class="stat-lbl">Niederl.</div></div>
                     </div>
                 </div>
             `;
         }
+    });
+}
+
+function renderLigaTable(ligaData, container) {
+    container.innerHTML = '';
+    if (!ligaData || ligaData.length === 0) {
+        container.innerHTML = '<tr><td colspan="9" style="text-align:center;">Keine Liga-Daten vorhanden.</td></tr>';
+        return;
+    }
+
+    ligaData.forEach(row => {
+        const tr = document.createElement('tr');
+        
+        // Euer Team wird gold markiert!
+        if (row.team.includes('TV Kapellen 1919 e.V. 3')) {
+            tr.className = 'own-team';
+        }
+
+        tr.innerHTML = `
+            <td style="text-align: center; font-weight: bold;">${row.platz}</td>
+            <td>${row.team}</td>
+            <td style="text-align: center;">${row.spiele}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--zusage);">${row.sieg}</td>
+            <td style="text-align: center;">${row.unentschieden}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--absage);">${row.niederlage}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--gold);">${row.punkte}</td>
+            <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.sets}</td>
+            <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.legs}</td>
+        `;
+        container.appendChild(tr);
     });
 }
 
