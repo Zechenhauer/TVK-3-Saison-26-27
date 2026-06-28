@@ -452,7 +452,7 @@ function renderKaderAndPersonalCard(stats, container) {
                         <p style="font-size: 13px;"><i class="fa-solid fa-star" style="color:var(--gold);"></i> Highlights: ${p.highlights || 'Keine Einträge'}</p>
                     </div>
                     <div class="personal-stats-grid">
-                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(1)}%</div><div class="stat-lbl">Match-Score</div></div>
+                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(2)}%</div><div class="stat-lbl">Match-Score</div></div>
                         <div class="stat-box"><div class="stat-val">${p.avg.toFixed(2)}</div><div class="stat-lbl">Saison AVG</div></div>
                         <div class="stat-box"><div class="stat-val">${p.matches || p.spiele}</div><div class="stat-lbl">Matches</div></div>
                         <div class="stat-box"><div class="stat-val" style="color:var(--zusage);">${p.gewonnen}</div><div class="stat-lbl">Siege</div></div>
