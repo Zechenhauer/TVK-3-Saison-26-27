@@ -332,9 +332,6 @@ function formatPlayerName(name) {
     const cleanName = name.replace(' (TC 1)', '').trim();
     const color = playerColors[cleanName] || "#e2e8f0";
 
-    if (cleanName === "Jürgen Schützendorf") {
-        return `<span class="player-name" style="color: ${color};">Jürgen Schützendorf <span class="captain-badge">TC 1</span></span>`;
-    }
     return `<span class="player-name" style="color: ${color};">${cleanName}</span>`;
 }
 
