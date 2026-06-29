@@ -201,6 +201,10 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
                 <option value="Wolfram Senger">Wolfram Senger</option>
                 <option value="Dominik Helmke">Dominik Helmke</option>
                 <option value="Michael Müller">Michael Müller</option>
+                <option value="Platzhalter 1">Platzhalter 1</option>
+                <option value="Platzhalter 2">Platzhalter 2</option>
+                <option value="Platzhalter 3">Platzhalter 3</option>
+                <option value="Platzhalter 4">Platzhalter 4</option>
             </select>
             <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">Freischalten</button>
         </div>
@@ -229,6 +233,28 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
     </div>
 </div>
 
+<div class="slide-container" id="slideDoppel">
+    <h2 class="slide-title">Doppel-Rangliste</h2>
+    <div class="content-area" style="overflow-x: auto;">
+        <table class="liga-table">
+            <thead>
+                <tr>
+                    <th>Spieler 1</th>
+                    <th>Spieler 2</th>
+                    <th style="width: 40px; text-align: center;">Sp</th>
+                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
+                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
+                </tr>
+            </thead>
+            <tbody id="doppel-table-body">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 20px;">Lade Doppel-Rangliste...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="slide-container" id="slideLiga">
     <h2 class="slide-title">Offizielle Liga-Tabelle</h2>
     <div class="content-area" style="overflow-x: auto;">
@@ -249,28 +275,6 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
             <tbody id="liga-table-body">
                 <tr>
                     <td colspan="9" style="text-align: center; padding: 20px;">Lade Ligatabelle...</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="slide-container" id="slideDoppel">
-    <h2 class="slide-title">Doppel-Rangliste</h2>
-    <div class="content-area" style="overflow-x: auto;">
-        <table class="liga-table">
-            <thead>
-                <tr>
-                    <th>Spieler 1</th>
-                    <th>Spieler 2</th>
-                    <th style="width: 40px; text-align: center;">Sp</th>
-                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
-                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
-                </tr>
-            </thead>
-            <tbody id="doppel-table-body">
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 20px;">Lade Doppel-Rangliste...</td>
                 </tr>
             </tbody>
         </table>
@@ -317,7 +321,11 @@ const playerColors = {
     "Lars Neutag": "#845EF7",
     "Wolfram Senger": "#A9E34B",
     "Dominik Helmke": "#20C997",
-    "Michael Müller": "#FF8787"
+    "Michael Müller": "#FF8787",
+    "Platzhalter 1": "#FFFFFF",
+    "Platzhalter 2": "#A0AEC0",
+    "Platzhalter 3": "#ED8936",
+    "Platzhalter 4": "#48BB78"
 };
 
 function formatPlayerName(name) {
@@ -386,6 +394,23 @@ function renderDashboard(matches, container) {
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
+        // Spiellokal-Adresse wird automatisch übergeben (Heimadresse oder aus der Google Sheets-Spalte)
+        const spielortInfo = m.adresse || (isHeim ? "Jugendzentrum Henri, Industriestr. 9b, 47447 Moers" : "Adresse wird noch bekannt gegeben");
+
+        const adresseHtml = `
+            <div style="
+                margin-top: 8px; 
+                font-size: 11px; 
+                color: var(--text-dim); 
+                background: rgba(255,255,255,0.03); 
+                padding: 6px 10px; 
+                border-radius: 4px; 
+                border-left: 2px solid ${isHeim ? 'var(--gold)' : 'var(--accent-blue)'};
+            ">
+                <i class="fa-solid fa-location-dot" style="color: ${isHeim ? 'var(--gold)' : 'var(--accent-blue)'}; margin-right: 5px;"></i> 
+                <strong>Spielort:</strong><br>${spielortInfo}
+            </div>`;
+
         let actionContent = `
             <div class="action-row">
                 <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
@@ -406,7 +431,8 @@ function renderDashboard(matches, container) {
             <h4>Spieltag ${m.id}</h4>
             <div class="match-title">vs. ${m.gegner || 'TBA'}</div>
             <div class="match-date"><i class="fa-regular fa-clock"></i> ${formatGermanDate(m.datum)} - ${m.uhrzeit} Uhr</div>
-            <div class="match-status">
+            ${adresseHtml}
+            <div class="match-status" style="margin-top: 15px;">
                 <span class="status-yes"><strong>Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Keine Zusagen</i>'}</span>
                 <span class="status-no"><strong>Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine Absagen</i>'}</span>
             </div>
@@ -452,7 +478,7 @@ function renderKaderAndPersonalCard(stats, container) {
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div class="kader-left">
                         <div class="kader-rank">#${index + 1}</div>
-                        <div>${formatPlayerName(p.spieler)}</div>
+                        <div>formatPlayerName(p.spieler)</div>
                     </div>
                     <div class="kader-details">
                         <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(2)}%</span><span class="lbl">Quote</span></div>
@@ -465,6 +491,8 @@ function renderKaderAndPersonalCard(stats, container) {
                 ${highlightsText}
             </div>
         `;
+        // Schnell-Korrektur für die saubere Namensausgabe in der Liste
+        row.querySelector('.kader-left > div:last-child').innerHTML = formatPlayerName(p.spieler);
         container.appendChild(row);
 
         if (p.spieler.toLowerCase() === cleanCurrentUser.toLowerCase()) {
