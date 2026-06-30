@@ -862,7 +862,10 @@ async function updateStatus(matchId, status) {
     setTimeout(initApp, 400);
 }
 
-if(currentUser) initApp();
+if(currentUser) {
+    initApp();
+    setInterval(initApp, 15000);
+}
 </script>
 </body>
 </html>
