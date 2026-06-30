@@ -102,10 +102,12 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .status-no { color: var(--absage); display: block; }
 
 .player-name { font-weight: bold; display: inline-block; }
-.action-row { display: flex; gap: 10px; }
+.action-row { display: flex; gap: 10px; margin-bottom: 10px; }
 .app-btn { flex: 1; padding: 12px; border: 1px solid #333; border-radius: 6px; background: transparent; color: white; cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: #000; }
 .app-btn.active-no { background: var(--absage); border-color: var(--absage); color: #fff; }
+.app-btn.mf-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+.app-btn.mf-btn:hover { background: var(--gold-dim); }
 
 /* PERSONAL CARD TILE */
 .personal-card { background: linear-gradient(135deg, #0c1626 0%, #050a14 100%); border: 1px solid var(--gold); border-radius: 12px; padding: 25px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px; }
@@ -135,7 +137,6 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .liga-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; background: var(--card-bg); border-radius: 8px; overflow: hidden; }
 .liga-table th { background: rgba(255,255,255,0.03); font-family: 'Poppins'; font-weight: bold; color: var(--gold); text-transform: uppercase; font-size: 11px; padding: 12px 10px; text-align: left; border-bottom: 2px solid var(--gold-dim); }
 .liga-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-main); }
-/* Hervorhebung für TV Kapellen 3 */
 .liga-table tr.own-team { background: rgba(212, 175, 55, 0.25); font-weight: bold; border-left: 4px solid var(--gold); }
 .liga-table tr.own-team td { color: var(--white); }
 
@@ -145,12 +146,31 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 .tile { background: var(--card-bg); padding: 30px; border-radius: 8px; border-top: 4px solid var(--gold); flex: 1; }
 .tile i { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
 
-.captain-badge { background: var(--gold); color: #000; padding: 1px 4px; font-size: 9px; font-weight: bold; border-radius: 2px; vertical-align: middle; margin-left: 2px; }
-
 #onboarding { position: fixed; inset: 0; background: var(--navy); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
 .onboard-card { background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--gold); width: 100%; max-width: 400px; text-align: center; }
-.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 20px 0; font-size: 16px; }
-.match-date i { margin-right: 5px; color: var(--gold); }
+.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 20px 0 10px 0; font-size: 16px; }
+.onboard-card input[type="password"] { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin-bottom: 20px; font-size: 16px; text-align: center; }
+
+/* AUFSTELLUNGS-MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
+.modal-content { background: var(--navy); border: 1px solid var(--gold); border-radius: 12px; padding: 25px; width: 100%; max-width: 650px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; max-height: 90vh; overflow-y: auto; }
+.modal h3 { margin-bottom: 15px; font-size: 1.3rem; border-bottom: 1px solid var(--gold-dim); padding-bottom: 10px; }
+.modal-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+.modal-table th { color: var(--gold); padding: 10px; text-align: center; border-bottom: 1px solid var(--gold-dim); font-size: 11px; text-transform: uppercase; }
+.modal-table th:first-child { text-align: left; }
+.modal-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
+.modal-table td:first-child { text-align: left; font-weight: bold; }
+.modal-table input[type="checkbox"] { transform: scale(1.3); cursor: pointer; accent-color: var(--gold); }
+.modal-actions { display: flex; flex-direction: column; gap: 15px; }
+
+/* VISUELLE ANZEIGE */
+.aufstellung-display { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 6px; padding: 12px; margin-top: 10px; font-size: 12px; }
+.aufstellung-display div { margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 8px; }
+.aufstellung-display div:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+.aufstellung-display strong { color: var(--gold); text-transform: uppercase; font-size: 10px; display: inline-block; width: 75px; }
+.visibility-badge { display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: bold; border-radius: 3px; margin-left: 5px; text-transform: uppercase; }
+.badge-locked { background: #ef4444; color: #fff; }
+.badge-public { background: #10b981; color: #000; }
     </style>
 </head>
 <body>
@@ -192,22 +212,28 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
             <i class="fa-solid fa-id-badge" style="font-size: 40px; color: var(--gold);"></i>
             <h2 style="margin-top: 15px; font-size: 24px;">Login</h2>
             <p>Wähle dein Profil für 26/27</p>
-            <select id="player-select">
+            <select id="player-select" onchange="togglePasswordInput()">
                 <option value="" disabled selected>Identität wählen...</option>
-                <option value="Jürgen Schützendorf">Jürgen Schützendorf</option>
-                <option value="Ludger Schledorn">Ludger Schledorn</option>
-                <option value="Markus Lenz">Markus Lenz</option>
-                <option value="Niklas Weichert">Niklas Weichert</option>
-                <option value="Andreas Denner">Andreas Denner</option>
-                <option value="Markus Ginsel">Markus Ginsel</option>
+                <option value="Jürgen Schützendorf">Jürgen Schützendorf (MF1)</option>
+                <option value="Markus Ginsel">Markus Ginsel (MF2)</option>
                 <option value="Dominik Helmke">Dominik Helmke</option>
+                <option value="Ludger Schledorn">Ludger Schledorn</option>
+                <option value="Niklas Weichert">Niklas Weichert</option>
                 <option value="Michael Müller">Michael Müller</option>
-                <option value="Thomas Kliver ?">Thomas Kliver ?</option>
-                <option value="Testeintrag">Testeintrag</option>
-                <option value="Sven Rozanski ?">Sven Rozanski ?</option>
-                <option value="Florian Hartwich ?">Florian Hartwich ?</option>
+                <option value="Markus Lenz">Markus Lenz</option>
+                <option value="Andreas Denner">Andreas Denner</option>
+                <option value="Platzhalter 1">Platzhalter 1</option>
+                <option value="Platzhalter 2">Platzhalter 2</option>
+                <option value="Platzhalter 3">Platzhalter 3</option>
+                <option value="Platzhalter 4">Platzhalter 4</option>
             </select>
+            
+            <div id="password-container" style="display: none;">
+                <input type="password" id="mf-password" placeholder="Passwort eingeben...">
+            </div>
+
             <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">Freischalten</button>
+            <p id="login-error" style="color: var(--absage); font-size: 12px; margin-top: 10px; display: none;">Falsches Passwort!</p>
         </div>
     </div>
 
@@ -221,6 +247,35 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
         <div style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
             <span id="active-user" style="color: var(--gold); font-weight: 700; font-size: 14px;"></span>
             <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 12px;">Profil wechseln</button>
+        </div>
+    </div>
+</div>
+
+<div id="aufstellung-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="modal-title">Aufstellung planen</h3>
+        <table class="modal-table">
+            <thead>
+                <tr>
+                    <th>Spieler</th>
+                    <th>1. Einzel</th>
+                    <th>Doppel</th>
+                    <th>2. Einzel</th>
+                </tr>
+            </thead>
+            <tbody id="modal-table-body">
+                </tbody>
+        </table>
+        
+        <div class="modal-actions">
+            <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--gold-dim); width: 100%; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="chk-public-visibility" style="transform: scale(1.4); accent-color: var(--gold); cursor: pointer;">
+                <label for="chk-public-visibility" style="font-size: 13px; font-weight: bold; color: var(--white); cursor: pointer;">Aufstellung für alle sichtbar freigeben</label>
+            </div>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="app-btn active-yes" id="btn-save-aufstellung" onclick="saveAufstellungData()">Speichern</button>
+                <button class="app-btn active-no" onclick="closeModal()">Abbrechen</button>
+            </div>
         </div>
     </div>
 </div>
@@ -295,12 +350,52 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 <script>
 let currentUser = localStorage.getItem('tvk3_user_26_27_mobile');
 
-// DEINE APPS SCRIPT URL HIER EINTRAGEN
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxJ1VjpLKyA0xH0CnNM2t9Tfx0Blv66PBw-9c3RzUtpP8cb6qTfaaa0tm-_cs0gaVG6g/exec';
+
+const kaderSpielerListe = [
+    "Jürgen Schützendorf", "Markus Ginsel", "Dominik Helmke", "Ludger Schledorn", 
+    "Niklas Weichert", "Michael Müller", "Markus Lenz", "Andreas Denner",
+    "Platzhalter 1", "Platzhalter 2", "Platzhalter 3", "Platzhalter 4"
+];
+
+// === PASSWÖRTER FÜR DIE MANNSCHAFTSFÜHRER ===
+const mfPasswords = {
+    "Jürgen Schützendorf": "1919",
+    "Markus Ginsel": "4321"
+};
+
+let activeMatchId = null;
+let globalAufstellungen = [];
+
+function togglePasswordInput() {
+    const sel = document.getElementById('player-select').value;
+    const passContainer = document.getElementById('password-container');
+    document.getElementById('login-error').style.display = 'none';
+    
+    if (sel === "Jürgen Schützendorf" || sel === "Markus Ginsel") {
+        passContainer.style.display = 'block';
+    } else {
+        passContainer.style.display = 'none';
+        document.getElementById('mf-password').value = '';
+    }
+}
 
 function confirmLogin() {
     const sel = document.getElementById('player-select').value;
+    const errLabel = document.getElementById('login-error');
     if(!sel) return;
+    
+    // Passwort-Abfrage falls MF ausgewählt
+    if (sel === "Jürgen Schützendorf" || sel === "Markus Ginsel") {
+        const inputPass = document.getElementById('mf-password').value;
+        const korrektesPass = mfPasswords[sel];
+        
+        if (inputPass !== korrektesPass) {
+            errLabel.style.display = 'block';
+            return;
+        }
+    }
+
     localStorage.setItem('tvk3_user_26_27_mobile', sel);
     currentUser = sel;
     document.getElementById('onboarding').style.display = 'none';
@@ -314,23 +409,23 @@ function logout() {
 
 const playerColors = {
     "Jürgen Schützendorf": "#FFD700",
-    "Ludger Schledorn": "#FF6B6B",
-    "Markus Lenz": "#4DABF7",
-    "Niklas Weichert": "#51CF66",
-    "Andreas Denner": "#7f00ff",
     "Markus Ginsel": "#FF922B",
     "Dominik Helmke": "#d5c58a",
+    "Ludger Schledorn": "#FF6B6B",
+    "Niklas Weichert": "#51CF66",
     "Michael Müller": "#F54927",
-    "Thomas Kliver ?": "#ffff00",
-    "Testeintrag": "#895129",
-    "Sven Rozanski ?": "#00bfff",
-    "Florian Hartwich ?": "#88e788"
+    "Markus Lenz": "#4DABF7",
+    "Andreas Denner": "#7f00ff",
+    "Platzhalter 1": "#895129",
+    "Platzhalter 2": "#895129",
+    "Platzhalter 3": "#895129",
+    "Platzhalter 4": "#895129"
 };
 
 function formatPlayerName(name) {
-    const cleanName = name.replace(' (TC 1)', '').trim();
+    if (!name) return "";
+    const cleanName = name.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
     const color = playerColors[cleanName] || "#e2e8f0";
-
     return `<span class="player-name" style="color: ${color};">${cleanName}</span>`;
 }
 
@@ -362,6 +457,8 @@ async function initApp() {
         let response = await fetch(GOOGLE_SCRIPT_URL);
         let data = await response.json();
         
+        globalAufstellungen = data.aufstellungen || [];
+        
         renderDashboard(data.spieltage, matchContainer);
         renderKaderAndPersonalCard(data.statistiken, kaderContainer);
         renderLigaTable(data.ligatabelle, ligaContainer);
@@ -377,6 +474,12 @@ async function initApp() {
 
 function renderDashboard(matches, container) {
     container.innerHTML = '';
+    
+    const isMF1 = currentUser === "Jürgen Schützendorf";
+    const isMF2 = currentUser === "Markus Ginsel";
+    const hatMFRolle = isMF1 || isMF2;
+    const aktuelleRolle = isMF1 ? "MF1" : (isMF2 ? "MF2" : "");
+
     matches.forEach(m => {
         const card = document.createElement('div');
         card.className = 'match-card';
@@ -390,7 +493,6 @@ function renderDashboard(matches, container) {
         const badgeClass = isHeim ? 'loc-h' : 'loc-a';
         const badgeText = isHeim ? 'Heim' : 'Auswärts';
 
-        // Spiellokal-Adresse wird automatisch übergeben (Heimadresse oder aus der Google Sheets-Spalte)
         const spielortInfo = m.adresse || (isHeim ? "Jugendzentrum Henri, Industriestr. 9b, 47447 Moers" : "Adresse wird noch bekannt gegeben");
 
         const adresseHtml = `
@@ -407,12 +509,65 @@ function renderDashboard(matches, container) {
                 <strong>Spielort:</strong><br>${spielortInfo}
             </div>`;
 
+        const aufstMF1 = globalAufstellungen.find(a => a.id == m.id && a.rolle === "MF1");
+        const aufstMF2 = globalAufstellungen.find(a => a.id == m.id && a.rolle === "MF2");
+
+        let aufstellungHtml = "";
+        
+        function istFuerAlleFreigegeben(aufst) {
+            return aufst && (aufst.freigegeben === true || aufst.freigegeben === "true");
+        }
+
+        if (hatMFRolle) {
+            if (aufstMF1 || aufstMF2) {
+                aufstellungHtml = `<div class="aufstellung-display">`;
+                
+                if (aufstMF1) {
+                    const badge = istFuerAlleFreigegeben(aufstMF1) ? `<span class="visibility-badge badge-public">Freigegeben</span>` : `<span class="visibility-badge badge-locked">Intern</span>`;
+                    aufstellungHtml += `<div><strong>Planung MF1:</strong> 1.E: ${aufstMF1.einzel1.join(', ') || '-'} | D: ${aufstMF1.doppel.join(', ') || '-'} | 2.E: ${aufstMF1.einzel2.join(', ') || '-'} ${badge}</div>`;
+                } else {
+                    aufstellungHtml += `<div><strong>Planung MF1:</strong> <i>Noch keine Liste erstellt</i></div>`;
+                }
+
+                if (aufstMF2) {
+                    const badge = istFuerAlleFreigegeben(aufstMF2) ? `<span class="visibility-badge badge-public">Freigegeben</span>` : `<span class="visibility-badge badge-locked">Intern</span>`;
+                    aufstellungHtml += `<div><strong>Planung MF2:</strong> 1.E: ${aufstMF2.einzel1.join(', ') || '-'} | D: ${aufstMF2.doppel.join(', ') || '-'} | 2.E: ${aufstMF2.einzel2.join(', ') || '-'} ${badge}</div>`;
+                } else {
+                    aufstellungHtml += `<div><strong>Planung MF2:</strong> <i>Noch keine Liste erstellt</i></div>`;
+                }
+                
+                aufstellungHtml += `</div>`;
+            }
+        } else {
+            let zeigeMF1 = istFuerAlleFreigegeben(aufstMF1);
+            let zeigeMF2 = istFuerAlleFreigegeben(aufstMF2);
+
+            if (zeigeMF1 || zeigeMF2) {
+                aufstellungHtml = `<div class="aufstellung-display">`;
+                if (zeigeMF1) {
+                    aufstellungHtml += `<div><strong>Aufstellung (MF1):</strong> 1.E: ${aufstMF1.einzel1.join(', ') || '-'} | D: ${aufstMF1.doppel.join(', ') || '-'} | 2.E: ${aufstMF1.einzel2.join(', ') || '-'}</div>`;
+                }
+                if (zeigeMF2) {
+                    aufstellungHtml += `<div><strong>Aufstellung (MF2):</strong> 1.E: ${aufstMF2.einzel1.join(', ') || '-'} | D: ${aufstMF2.doppel.join(', ') || '-'} | 2.E: ${aufstMF2.einzel2.join(', ') || '-'}</div>`;
+                }
+                aufstellungHtml += `</div>`;
+            }
+        }
+
         let actionContent = `
             <div class="action-row">
                 <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
                 <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
             </div>
         `;
+
+        if (hatMFRolle) {
+            actionContent += `
+                <div class="action-row">
+                    <button class="app-btn mf-btn" onclick="openAufstellungModal(${m.id}, '${aktuelleRolle}')"><i class="fa-solid fa-clipboard-list"></i> Eigene Liste bearbeiten</button>
+                </div>
+            `;
+        }
 
         if (m.ergebnis && m.ergebnis !== "") {
             actionContent = `
@@ -432,10 +587,88 @@ function renderDashboard(matches, container) {
                 <span class="status-yes"><strong>Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Keine Zusagen</i>'}</span>
                 <span class="status-no"><strong>Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine Absagen</i>'}</span>
             </div>
-            ${actionContent}
+            ${aufstellungHtml}
+            <div style="margin-top:12px;">${actionContent}</div>
         `;
         container.appendChild(card);
     });
+}
+
+function openAufstellungModal(matchId, rolle) {
+    activeMatchId = matchId;
+    document.getElementById('modal-title').innerText = `Aufstellung Spieltag ${matchId} (${rolle})`;
+    document.getElementById('btn-save-aufstellung').setAttribute('onclick', `saveAufstellungData('${rolle}')`);
+    
+    const tbody = document.getElementById('modal-table-body');
+    tbody.innerHTML = '';
+
+    const bestehendeAufst = globalAufstellungen.find(a => a.id == matchId && a.rolle === rolle);
+    const e1Set = bestehendeAufst ? bestehendeAufst.einzel1 : [];
+    const dSet = bestehendeAufst ? bestehendeAufst.doppel : [];
+    const e2Set = bestehendeAufst ? bestehendeAufst.einzel2 : [];
+    
+    const istFreigegeben = bestehendeAufst ? (bestehendeAufst.freigegeben === true || bestehendeAufst.freigegeben === "true") : false;
+    document.getElementById('chk-public-visibility').checked = istFreigegeben;
+
+    kaderSpielerListe.forEach(spieler => {
+        const tr = document.createElement('tr');
+        const chkE1 = e1Set.includes(spieler) ? 'checked' : '';
+        const chkD = dSet.includes(spieler) ? 'checked' : '';
+        const chkE2 = e2Set.includes(spieler) ? 'checked' : '';
+
+        tr.innerHTML = `
+            <td>${spieler}</td>
+            <td><input type="checkbox" class="chk-e1" data-spieler="${spieler}" ${chkE1}></td>
+            <td><input type="checkbox" class="chk-d" data-spieler="${spieler}" ${chkD}></td>
+            <td><input type="checkbox" class="chk-e2" data-spieler="${spieler}" ${chkE2}></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('aufstellung-modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('aufstellung-modal').style.display = 'none';
+}
+
+async function saveAufstellungData(rolle) {
+    const btn = document.getElementById('btn-save-aufstellung');
+    btn.innerText = "Wird gespeichert...";
+    btn.disabled = true;
+
+    const einzel1 = [];
+    const doppel = [];
+    const einzel2 = [];
+    const freigegeben = document.getElementById('chk-public-visibility').checked;
+
+    document.querySelectorAll('.chk-e1:checked').forEach(el => einzel1.push(el.getAttribute('data-spieler')));
+    document.querySelectorAll('.chk-d:checked').forEach(el => doppel.push(el.getAttribute('data-spieler')));
+    document.querySelectorAll('.chk-e2:checked').forEach(el => einzel2.push(el.getAttribute('data-spieler')));
+
+    const payload = {
+        action: "saveAufstellung",
+        id: activeMatchId,
+        rolle: rolle,
+        einzel1: einzel1,
+        doppel: doppel,
+        einzel2: einzel2,
+        freigegeben: freigegeben
+    };
+
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    setTimeout(() => {
+        closeModal();
+        btn.innerText = "Speichern";
+        btn.disabled = false;
+        initApp();
+    }, 500);
 }
 
 function renderKaderAndPersonalCard(stats, container) {
@@ -444,13 +677,12 @@ function renderKaderAndPersonalCard(stats, container) {
     personalContainer.innerHTML = '';
     personalContainer.style.display = 'none';
 
-    const cleanCurrentUser = currentUser.replace(' (TC 1)', '').trim();
+    const cleanCurrentUser = currentUser.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
 
     stats.forEach((p, index) => {
         const row = document.createElement('div');
         row.className = 'kader-row';
         
-        // Highlights als schön eingerahmter und farblich gestalteter Kasten, falls vorhanden
         const highlightsText = p.highlights ? `
             <div style="
                 margin-top: 12px; 
@@ -474,7 +706,7 @@ function renderKaderAndPersonalCard(stats, container) {
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div class="kader-left">
                         <div class="kader-rank">#${index + 1}</div>
-                        <div>formatPlayerName(p.spieler)</div>
+                        <div></div>
                     </div>
                     <div class="kader-details">
                         <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(2)}%</span><span class="lbl">Quote</span></div>
@@ -487,7 +719,6 @@ function renderKaderAndPersonalCard(stats, container) {
                 ${highlightsText}
             </div>
         `;
-        // Schnell-Korrektur für die saubere Namensausgabe in der Liste
         row.querySelector('.kader-left > div:last-child').innerHTML = formatPlayerName(p.spieler);
         container.appendChild(row);
 
@@ -522,11 +753,9 @@ function renderLigaTable(ligaData, container) {
 
     ligaData.forEach(row => {
         const tr = document.createElement('tr');
-        
         if (row.team.trim() === 'TV Kapellen 1919 e.V. 3') {
             tr.className = 'own-team';
         }
-
         tr.innerHTML = `
             <td style="text-align: center; font-weight: bold;">${row.platz}</td>
             <td>${row.team}</td>
@@ -548,7 +777,6 @@ function renderDoppelTable(doppelData, container) {
         container.innerHTML = '<tr><td colspan="5" style="text-align:center;">Keine Doppel-Daten vorhanden.</td></tr>';
         return;
     }
-
     doppelData.forEach(row => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
