@@ -239,6 +239,26 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
             <h3 style="color: var(--gold); margin-bottom: 5px;"><i class="fa-solid fa-clipboard-list"></i> Mannschaftsaufstellung eintragen</h3>
             <p class="text-dim" style="margin-bottom: 20px;">Wähle oben zuerst den Spieltag aus, um die Aufstellung für diesen spezifischen Tag zu bearbeiten oder zu speichern.</p>
 
+            <div style="margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; border: 1px solid #333;">
+                <span style="color: var(--gold); font-weight: bold; display: block; margin-bottom: 10px;">Deine Rolle für die Aufstellung:</span>
+                <label style="margin-right: 20px; cursor: pointer; color: var(--white);">
+                    <input type="radio" name="mf-rolle" value="MF1" checked> Mannschaftsführer 1 (Du)
+                </label>
+                <label style="cursor: pointer; color: var(--white);">
+                    <input type="radio" name="mf-rolle" value="MF2"> Mannschaftsführer 2 (Kollege)
+                </label>
+            </div>
+            
+            <div style="margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; border: 1px solid #333;">
+                <span style="color: var(--gold); font-weight: bold; display: block; margin-bottom: 10px;">Aufstellung ansehen / vergleichen von:</span>
+                <label style="margin-right: 20px; cursor: pointer; color: var(--white);">
+                    <input type="radio" name="ansicht-rolle" value="MF1" checked> Eigene Aufstellung (MF1)
+                </label>
+                <label style="cursor: pointer; color: var(--white);">
+                    <input type="radio" name="ansicht-rolle" value="MF2"> Kollegen-Aufstellung (MF2)
+                </label>
+            </div>
+
             <h4 style="color: var(--white); margin-top: 15px; border-bottom: 1px solid var(--gold-dim); padding-bottom: 4px;">1. Einzel-Runde</h4>
             <div id="singles1-inputs" class="input-grid"></div>
 
@@ -626,118 +646,8 @@ function askForPassword() {
     if (enteredPassword === correctPassword) {
         // Formular und Inputs einblenden
         document.getElementById("lineup-section").style.display = "block";
-        
-        generateInputs('singles1-inputs', 'Einzel 1, Position ', 8);
-        generateInputs('doubles-inputs', 'Doppel ', 4);
-        generateInputs('singles2-inputs', 'Einzel 2, Position ', 8);
-        
-        // Versucht bei bereits gewähltem Dropdown direkt die Daten zu laden
-        const selectedSpieltag = document.getElementById('spieltag-select').value;
-        if (selectedSpieltag) {
-            loadLineupForDay(selectedSpieltag);
-        }
-        
-        alert("Zugriff gewährt!");
-    } else if (enteredPassword !== null) {
-        alert("Falsches Passwort!");
     }
 }
-
-function generateInputs(containerId, labelPrefix, count) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    container.innerHTML = ''; 
-    
-    for (let i = 1; i <= count; i++) {
-        const div = document.createElement('div');
-        div.style.display = "flex";
-        div.style.gap = "10px";
-        div.style.alignItems = "center";
-        div.style.marginBottom = "5px";
-        
-        div.innerHTML = `
-            <label style="width: 140px; font-weight: bold; color: var(--text-main); font-size: 13px;">${labelPrefix}${i}:</label>
-            <input type="text" id="${containerId}_pos_${i}" placeholder="Spielername eintragen" style="flex-grow: 1; padding: 6px 10px; border-radius: 5px; border: 1px solid var(--text-dim); background-color: var(--navy); color: var(--white); font-size: 13px;">
-        `;
-        container.appendChild(div);
-    }
-}
-
-function saveLineup() {
-    const spieltagId = document.getElementById('spieltag-select').value;
-    
-    if (!spieltagId || spieltagId === "") {
-        alert("Bitte wähle oben im Menü erst einen Spieltag aus!");
-        return;
-    }
-
-    let einzel1 = [];
-    for(let i = 1; i <= 8; i++) {
-        einzel1.push(document.getElementById(`singles1-inputs_pos_${i}`).value);
-    }
-
-    let doppel = [];
-    for(let i = 1; i <= 4; i++) {
-        doppel.push(document.getElementById(`doubles-inputs_pos_${i}`).value);
-    }
-
-    let einzel2 = [];
-    for(let i = 1; i <= 8; i++) {
-        einzel2.push(document.getElementById(`singles2-inputs_pos_${i}`).value);
-    }
-
-    // Übergabe an die Funktion im Apps Script Backend via Web-App URL
-    // Hier wird ausnahmsweise ein fetch POST-Request für das App-Formular verwendet,
-    // um eure bestehende Struktur sauber zu halten.
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            action: 'speichereAufstellung',
-            spieltagId: spieltagId, 
-            einzel1: einzel1, 
-            doppel: doppel, 
-            einzel2: einzel2 
-        })
-    }).then(() => {
-        alert("Aufstellung wurde erfolgreich für diesen Spieltag gespeichert!");
-    }).catch(err => {
-        alert("Fehler beim Speichern!");
-    });
-}
-
-function loadLineupForDay(spieltagId) {
-    if (!spieltagId || document.getElementById("lineup-section").style.display !== "block") return;
-    
-    // Holt sich das Array aus dem Google Apps Script über die Ladefunktion
-    google.script.run.withSuccessHandler(function(data) {
-        if (data) {
-            for(let i = 1; i <= 8; i++) {
-                const el = document.getElementById(`singles1-inputs_pos_${i}`);
-                if(el) el.value = data.einzel1[i-1] || '';
-            }
-            for(let i = 1; i <= 4; i++) {
-                const el = document.getElementById(`doubles-inputs_pos_${i}`);
-                if(el) el.value = data.doppel[i-1] || '';
-            }
-            for(let i = 1; i <= 8; i++) {
-                const el = document.getElementById(`singles2-inputs_pos_${i}`);
-                if(el) el.value = data.einzel2[i-1] || '';
-            }
-        } else {
-            clearLineupInputs();
-        }
-    }).ladeAufstellung(spieltagId);
-}
-
-function clearLineupInputs() {
-    document.querySelectorAll('#lineup-section input').forEach(input => input.value = '');
-}
-
-if(currentUser) initApp();
 </script>
-
 </body>
 </html>
