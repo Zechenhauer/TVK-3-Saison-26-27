@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Kapellen 1919 e.V. - Spieltags-Planer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="apple-touch-icon" href="https://drive.google.com/uc?id=1PB4X2QrrMlaRlajQEWDtJxRP2c6VTsI5">
+    <link rel="icon" sizes="192x192" href="https://drive.google.com/uc?id=1PB4X2QrrMlaRlajQEWDtJxRP2c6VTsI5">
+    
+    <style>
+/* 1. GLOBAL THEME & RESPONSIVE SETUP */
+:root {
+  --navy: #050a14;
+  --gold: #D4AF37;
+  --gold-dim: rgba(212, 175, 55, 0.1);
+  --white: #ffffff;
+  --card-bg: #0c1626;
+  --accent-blue: #0074D9;
+  --text-main: #e2e8f0;
+  --text-dim: #94a3b8;
+  --zusage: #10b981;
+  --absage: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: #000;
+  color: var(--text-main);
+  font-family: 'Lato', sans-serif;
+  line-height: 1.5;
+}
+
+.slide-container {
+  background-color: var(--navy);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 20px auto;
+  padding: 30px 20px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+@media (min-width: 1281px) {
+  body { padding: 40px 0; }
+  .slide-container {
+    width: 1280px;
+    padding: 50px 60px;
+    border-radius: 8px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    border: 1px solid var(--gold-dim);
+    margin-bottom: 40px;
+  }
+}
+
+.slide-container::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 116, 217, 0.1) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.slide-container > * { position: relative; z-index: 1; }
+
+h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--white); }
+h1 { font-size: clamp(36px, 8vw, 72px); line-height: 1.1; margin-bottom: 15px; }
+.slide-title { 
+  font-size: clamp(22px, 5vw, 32px); 
+  margin-bottom: 25px; 
+  border-left: 5px solid var(--gold); 
+  padding-left: 15px; 
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+}
+p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
+
+/* GRID SYSTEMS */
+.app-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+@media (min-width: 768px) { .app-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1281px) { .app-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* MATCH CARDS */
+.match-card { background: var(--card-bg); border: 1px solid var(--gold-dim); border-radius: 12px; padding: 20px; position: relative; }
+.game-loc-badge { position: absolute; top: 15px; right: 15px; padding: 3px 8px; font-size: 10px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+.loc-h { background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+.loc-a { background: rgba(0, 116, 217, 0.2); color: #0074D9; border: 1px solid #0074D9; }
+.match-card h4 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+.match-card .match-title { font-size: 1.2rem; margin-bottom: 5px; font-weight: 700; color: var(--white); padding-right: 40px; }
+.match-card .match-date { font-size: 13px; color: var(--gold); margin-bottom: 15px; }
+.match-status { font-size: 13px; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+.match-status strong { display: block; color: var(--white); margin-bottom: 2px; font-size: 12px; }
+.status-yes { color: var(--zusage); margin-bottom: 8px; display: block; }
+.status-no { color: var(--absage); display: block; }
+
+.player-name { font-weight: bold; display: inline-block; }
+.action-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.app-btn { flex: 1; padding: 12px; border: 1px solid #333; border-radius: 6px; background: transparent; color: white; cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.app-btn.active-yes { background: var(--zusage); border-color: var(--zusage); color: #000; }
+.app-btn.active-no { background: var(--absage); border-color: var(--absage); color: #fff; }
+.app-btn.mf-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+.app-btn.mf-btn:hover { background: var(--gold-dim); }
+
+/* PERSONAL CARD TILE */
+.personal-card { background: linear-gradient(135deg, #0c1626 0%, #050a14 100%); border: 1px solid var(--gold); border-radius: 12px; padding: 25px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px; }
+@media (min-width: 768px) { .personal-card { flex-direction: row; justify-content: space-between; align-items: center; } }
+.personal-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
+@media (min-width: 768px) { .personal-stats-grid { grid-template-columns: repeat(5, 1fr); width: auto; gap: 20px; } }
+.stat-box { background: rgba(255,255,255,0.02); padding: 10px 15px; border-radius: 6px; border-left: 3px solid var(--gold); }
+.stat-box .stat-val { font-size: 22px; font-weight: bold; color: var(--white); font-family: 'Poppins'; }
+.stat-box .stat-lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+
+/* KADER LISTE */
+.kader-list { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+.kader-row { display: flex; flex-direction: column; background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); gap: 10px; }
+@media (min-width: 768px) { 
+  .kader-row { flex-direction: row; align-items: center; justify-content: space-between; padding: 12px 20px; } 
+}
+.kader-left { display: flex; align-items: center; gap: 15px; }
+.kader-rank { font-family: 'Poppins'; font-weight: bold; color: var(--gold); font-size: 18px; width: 25px; }
+.kader-details { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
+@media (min-width: 768px) { .kader-details { background: none; padding: 0; gap: 25px; display: flex; } }
+.kader-stat-entry { display: flex; flex-direction: column; }
+@media (min-width: 768px) { .kader-stat-entry { align-items: center; } }
+.kader-stat-entry .val { font-size: 16px; font-weight: bold; color: var(--white); }
+.kader-stat-entry .lbl { font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
+
+/* LIGA-TABELLE STYLE */
+.liga-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; background: var(--card-bg); border-radius: 8px; overflow: hidden; }
+.liga-table th { background: rgba(255,255,255,0.03); font-family: 'Poppins'; font-weight: bold; color: var(--gold); text-transform: uppercase; font-size: 11px; padding: 12px 10px; text-align: left; border-bottom: 2px solid var(--gold-dim); }
+.liga-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-main); }
+.liga-table tr.own-team { background: rgba(212, 175, 55, 0.25); font-weight: bold; border-left: 4px solid var(--gold); }
+.liga-table tr.own-team td { color: var(--white); }
+
+/* MISSION TILES */
+.tiled-content { display: flex; flex-direction: column; gap: 20px; }
+@media (min-width: 1281px) { .tiled-content { flex-direction: row; } }
+.tile { background: var(--card-bg); padding: 30px; border-radius: 8px; border-top: 4px solid var(--gold); flex: 1; }
+.tile i { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
+
+#onboarding { position: fixed; inset: 0; background: var(--navy); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+.onboard-card { background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--gold); width: 100%; max-width: 400px; text-align: center; }
+.onboard-card select { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin: 20px 0 10px 0; font-size: 16px; }
+.onboard-card input[type="password"] { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 6px; margin-bottom: 20px; font-size: 16px; text-align: center; }
+
+/* AUFSTELLUNGS-MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
+.modal-content { background: var(--navy); border: 1px solid var(--gold); border-radius: 12px; padding: 25px; width: 100%; max-width: 650px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; max-height: 90vh; overflow-y: auto; }
+.modal h3 { margin-bottom: 15px; font-size: 1.3rem; border-bottom: 1px solid var(--gold-dim); padding-bottom: 10px; }
+.modal-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+.modal-table th { color: var(--gold); padding: 10px; text-align: center; border-bottom: 1px solid var(--gold-dim); font-size: 11px; text-transform: uppercase; }
+.modal-table th:first-child { text-align: left; }
+.modal-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
+.modal-table td:first-child { text-align: left; font-weight: bold; }
+.modal-table input[type="checkbox"] { transform: scale(1.3); cursor: pointer; accent-color: var(--gold); }
+.modal-table select { background: #000; color: #fff; border: 1px solid #333; padding: 5px; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer; }
+.modal-table select:focus { border-color: var(--gold); outline: none; }
+.modal-actions { display: flex; flex-direction: column; gap: 15px; }
+
+/* VISUELLE ANZEIGE */
+.aufstellung-display { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 6px; padding: 12px; margin-top: 10px; font-size: 12px; }
+.aufstellung-display div { margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 8px; }
+.aufstellung-display div:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+.aufstellung-display strong { color: var(--gold); text-transform: uppercase; font-size: 10px; display: inline-block; width: 75px; }
+.visibility-badge { display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: bold; border-radius: 3px; margin-left: 5px; text-transform: uppercase; }
+.badge-locked { background: #ef4444; color: #fff; }
+.badge-public { background: #10b981; color: #000; }
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slide1">
+    <div class="title-layout">
+        <p style="color: var(--gold); letter-spacing: 3px; font-weight: 700; font-size: 14px;">PREMIUM SQUAD MANAGEMENT</p>
+        <h1>TV Kapellen 1919 e.V. 3<br><span style="color:var(--gold)">Saison 2026/27</span></h1>
+        <p style="max-width: 600px; margin-top: 20px;">Die digitale Zentrale für Kaderplanung, Spieltage und Performance-Tracking.</p>
+    </div>
+</div>
+
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Mission & Zielsetzung</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Präzision</h3>
+                <p>Dein stärkster Gegner ist nicht der am Board, sondern die Stimme in deinem Kopf. Checke sie aus!</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Klassenerhalt</h3>
+                <p>Klassenerhalt ist kein Zufall, sondern Teamarbeit – jeder Pfeil zählt für unser Ziel!</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-handshake"></i>
+                <h3>Teamgeist</h3>
+                <p>Ein Team, ein Ziel: Gemeinsam ans Oche, gemeinsam jubeln!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide3">
+    <div id="onboarding">
+        <div class="onboard-card">
+            <i class="fa-solid fa-id-badge" style="font-size: 40px; color: var(--gold);"></i>
+            <h2 style="margin-top: 15px; font-size: 24px;">Login</h2>
+            <p>Wähle dein Profil für 26/27</p>
+            <select id="player-select" onchange="togglePasswordInput()">
+                <option value="" disabled selected>Identität wählen...</option>
+                <option value="Jürgen Schützendorf">Jürgen Schützendorf (MF1)</option>
+                <option value="Markus Ginsel">Markus Ginsel (MF2)</option>
+                <option value="Dominik Helmke">Dominik Helmke</option>
+                <option value="Ludger Schledorn">Ludger Schledorn</option>
+                <option value="Niklas Weichert">Niklas Weichert</option>
+                <option value="Michael Müller">Michael Müller</option>
+                <option value="Markus Lenz">Markus Lenz</option>
+                <option value="Andreas Denner">Andreas Denner</option>
+                <option value="Platzhalter 1">Platzhalter 1</option>
+                <option value="Platzhalter 2">Platzhalter 2</option>
+                <option value="Platzhalter 3">Platzhalter 3</option>
+                <option value="Platzhalter 4">Platzhalter 4</option>
+            </select>
+            
+            <div id="password-container" style="display: none;">
+                <input type="password" id="mf-password" placeholder="Passwort eingeben...">
+            </div>
+
+            <button class="app-btn active-yes" style="width: 100%; padding: 15px;" onclick="confirmLogin()">Freischalten</button>
+            <p id="login-error" style="color: var(--absage); font-size: 12px; margin-top: 10px; display: none;">Falsches Passwort!</p>
+        </div>
+    </div>
+
+    <div id="personal-card-container" style="display:none;"></div>
+
+    <h2 class="slide-title">Spieltags-Planer</h2>
+    <div class="content-area">
+        <div id="match-grid" class="app-grid">
+            <p style="text-align:center; padding-top:20px;">Lade Spieldaten...</p>
+        </div>
+        <div style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <span id="active-user" style="color: var(--gold); font-weight: 700; font-size: 14px;"></span>
+            <button onclick="logout()" style="background: none; border: none; color: var(--text-dim); text-decoration: underline; cursor: pointer; font-size: 12px;">Profil wechseln</button>
+        </div>
+    </div>
+</div>
+
+<div id="aufstellung-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="modal-title">Aufstellung planen</h3>
+        <table class="modal-table">
+            <thead>
+                <tr>
+                    <th>Spieler</th>
+                    <th>1. Einzel</th>
+                    <th>Doppel</th>
+                    <th>2. Einzel</th>
+                </tr>
+            </thead>
+            <tbody id="modal-table-body">
+                </tbody>
+        </table>
+        
+        <div class="modal-actions">
+            <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--gold-dim); width: 100%; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="chk-public-visibility" style="transform: scale(1.4); accent-color: var(--gold); cursor: pointer;">
+                <label for="chk-public-visibility" style="font-size: 13px; font-weight: bold; color: var(--white); cursor: pointer;">Aufstellung für alle sichtbar freigeben</label>
+            </div>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="app-btn active-yes" id="btn-save-aufstellung" onclick="saveAufstellungData()">Speichern</button>
+                <button class="app-btn active-no" onclick="closeModal()">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">Kader Übersicht (nach Match-Score)</h2>
+    <div class="content-area">
+        <div id="kader-list-target" class="kader-list">
+            <p style="text-align:center; padding:20px;">Lade Statistiken...</p>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container" id="slideDoppel">
+    <h2 class="slide-title">Doppel-Rangliste</h2>
+    <div class="content-area" style="overflow-x: auto;">
+        <table class="liga-table">
+            <thead>
+                <tr>
+                    <th>Spieler 1</th>
+                    <th>Spieler 2</th>
+                    <th style="width: 40px; text-align: center;">Sp</th>
+                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
+                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
+                </tr>
+            </thead>
+            <tbody id="doppel-table-body">
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 20px;">Lade Doppel-Rangliste...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="slide-container" id="slideLiga">
+    <h2 class="slide-title">Offizielle Liga-Tabelle</h2>
+    <div class="content-area" style="overflow-x: auto;">
+        <table class="liga-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px; text-align: center;">Pl.</th>
+                    <th>Mannschaft</th>
+                    <th style="width: 35px; text-align: center;">Sp</th>
+                    <th style="width: 30px; text-align: center; color: var(--zusage);">S</th>
+                    <th style="width: 30px; text-align: center;">U</th>
+                    <th style="width: 30px; text-align: center; color: var(--absage);">N</th>
+                    <th style="width: 40px; text-align: center;">Pkt</th>
+                    <th style="width: 60px; text-align: center;">Sets</th>
+                    <th style="width: 60px; text-align: center;">Legs</th>
+                </tr>
+            </thead>
+            <tbody id="liga-table-body">
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 20px;">Lade Ligatabelle...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="slide-container" id="slide5" style="justify-content: center; text-align: center;">
+    <div class="content-area" style="display: flex; align-items: center; justify-content: center;">
+        <div style="max-width: 800px;">
+            <i class="fa-solid fa-quote-left" style="font-size: 40px; color: var(--gold); margin-bottom: 20px;"></i>
+            <h2 style="font-size: clamp(24px, 6vw, 48px); line-height: 1.2; font-weight: 400; font-style: italic;">"Erfolg ist kein Zufall. Es ist Vorbereitung, harte Arbeit und das Wissen, dass das Team hinter einem steht."</h2>
+            <p style="margin-top: 20px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-size: 12px;">TV Kapellen 1919 e.V. 3 | 2026/27</p>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentUser = localStorage.getItem('tvk3_user_26_27_mobile');
+
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxJ1VjpLKyA0xH0CnNM2t9Tfx0Blv66PBw-9c3RzUtpP8cb6qTfaaa0tm-_cs0gaVG6g/exec';
+
+const kaderSpielerListe = [
+    "Jürgen Schützendorf", "Markus Ginsel", "Dominik Helmke", "Ludger Schledorn", 
+    "Niklas Weichert", "Michael Müller", "Markus Lenz", "Andreas Denner",
+    "Platzhalter 1", "Platzhalter 2", "Platzhalter 3", "Platzhalter 4"
+];
+
+const mfPasswords = {
+    "Jürgen Schützendorf": "1919",
+    "Markus Ginsel": "4321"
+};
+
+let activeMatchId = null;
+let globalAufstellungen = [];
+
+function togglePasswordInput() {
+    const sel = document.getElementById('player-select').value;
+    const passContainer = document.getElementById('password-container');
+    document.getElementById('login-error').style.display = 'none';
+    
+    if (sel === "Jürgen Schützendorf" || sel === "Markus Ginsel") {
+        passContainer.style.display = 'block';
+    } else {
+        passContainer.style.display = 'none';
+        document.getElementById('mf-password').value = '';
+    }
+}
+
+function confirmLogin() {
+    const sel = document.getElementById('player-select').value;
+    const errLabel = document.getElementById('login-error');
+    if(!sel) return;
+    
+    if (sel === "Jürgen Schützendorf" || sel === "Markus Ginsel") {
+        const inputPass = document.getElementById('mf-password').value;
+        const korrektesPass = mfPasswords[sel];
+        
+        if (inputPass !== korrektesPass) {
+            errLabel.style.display = 'block';
+            return;
+        }
+    }
+
+    localStorage.setItem('tvk3_user_26_27_mobile', sel);
+    currentUser = sel;
+    document.getElementById('onboarding').style.display = 'none';
+    initApp();
+}
+
+function logout() {
+    localStorage.removeItem('tvk3_user_26_27_mobile');
+    location.reload();
+}
+
+const playerColors = {
+    "Jürgen Schützendorf": "#FFD700",
+    "Markus Ginsel": "#FF922B",
+    "Dominik Helmke": "#d5c58a",
+    "Ludger Schledorn": "#FF6B6B",
+    "Niklas Weichert": "#51CF66",
+    "Michael Müller": "#F54927",
+    "Markus Lenz": "#4DABF7",
+    "Andreas Denner": "#7f00ff",
+    "Platzhalter 1": "#895129",
+    "Platzhalter 2": "#895129",
+    "Platzhalter 3": "#895129",
+    "Platzhalter 4": "#895129"
+};
+
+function formatPlayerName(name) {
+    if (!name) return "";
+    const cleanName = name.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
+    const color = playerColors[cleanName] || "#e2e8f0";
+    return `<span class="player-name" style="color: ${color};">${cleanName}</span>`;
+}
+
+function formatGermanDate(dateStr) {
+    if (!dateStr) return 'Termin offen';
+    let str = dateStr.toString().trim();
+    if (str.toLowerCase().includes('offen') || str === '') return 'Termin offen';
+    if (str.includes('T') && str.includes('-')) {
+        try {
+            const d = new Date(str);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+        } catch (e) {}
+    }
+    return str;
+}
+
+async function initApp() {
+    if(!currentUser) return;
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('active-user').innerHTML = formatPlayerName(currentUser);
+    
+    const matchContainer = document.getElementById('match-grid');
+    const kaderContainer = document.getElementById('kader-list-target');
+    const ligaContainer = document.getElementById('liga-table-body');
+
+    try {
+        let response = await fetch(GOOGLE_SCRIPT_URL);
+        let data = await response.json();
+        
+        globalAufstellungen = data.aufstellungen || [];
+        
+        renderDashboard(data.spieltage, matchContainer);
+        renderKaderAndPersonalCard(data.statistiken, kaderContainer);
+        renderLigaTable(data.ligatabelle, ligaContainer);
+        renderDoppelTable(data.doppeltabelle, document.getElementById('doppel-table-body'));
+        
+    } catch (err) {
+        matchContainer.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
+        kaderContainer.innerHTML = '<p style="text-align:center; color:red;">Verbindungsfehler!</p>';
+        ligaContainer.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
+        document.getElementById('doppel-table-body').innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
+    }
+}
+
+function formatAufstellungString(einzel1, doppel, einzel2) {
+    let parts = [];
+    if (einzel1 && einzel1.length > 0) parts.push(`1.E: ${einzel1.join(', ')}`);
+    
+    if (doppel && doppel.length > 0) {
+        // Formatiere die Doppel-Paarungen leserlich um
+        parts.push(`D: ${doppel.join(' / ')}`);
+    } else if (doppel) {
+        parts.push(`D: -`);
+    }
+    
+    if (einzel2 && einzel2.length > 0) parts.push(`2.E: ${einzel2.join(', ')}`);
+    return parts.join(' | ');
+}
+
+function renderDashboard(matches, container) {
+    container.innerHTML = '';
+    
+    const isMF1 = currentUser === "Jürgen Schützendorf";
+    const isMF2 = currentUser === "Markus Ginsel";
+    const hatMFRolle = isMF1 || isMF2;
+    const aktuelleRolle = isMF1 ? "MF1" : (isMF2 ? "MF2" : "");
+
+    matches.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'match-card';
+        
+        const isYes = m.zusagen.includes(currentUser);
+        const isNo = m.absagen.includes(currentUser);
+        const formattedZusagen = m.zusagen.map(formatPlayerName);
+        const formattedAbsagen = m.absagen.map(formatPlayerName);
+
+        const isHeim = m.ort.trim().toUpperCase() === 'H';
+        const badgeClass = isHeim ? 'loc-h' : 'loc-a';
+        const badgeText = isHeim ? 'Heim' : 'Auswärts';
+
+        const spielortInfo = m.adresse || (isHeim ? "Jugendzentrum Henri, Industriestr. 9b, 47447 Moers" : "Adresse wird noch bekannt gegeben");
+
+        const adresseHtml = `
+            <div style="
+                margin-top: 8px; 
+                font-size: 11px; 
+                color: var(--text-dim); 
+                background: rgba(255,255,255,0.03); 
+                padding: 6px 10px; 
+                border-radius: 4px; 
+                border-left: 2px solid ${isHeim ? 'var(--gold)' : 'var(--accent-blue)'};
+            ">
+                <i class="fa-solid fa-location-dot" style="color: ${isHeim ? 'var(--gold)' : 'var(--accent-blue)'}; margin-right: 5px;"></i> 
+                <strong>Spielort:</strong><br>${spielortInfo}
+            </div>`;
+
+        const aufstMF1 = globalAufstellungen.find(a => a.id == m.id && a.rolle === "MF1");
+        const aufstMF2 = globalAufstellungen.find(a => a.id == m.id && a.rolle === "MF2");
+
+        let aufstellungHtml = "";
+        
+        function istFuerAlleFreigegeben(aufst) {
+            return aufst && (aufst.freigegeben === true || aufst.freigegeben === "true");
+        }
+
+        if (hatMFRolle) {
+            if (aufstMF1 || aufstMF2) {
+                aufstellungHtml = `<div class="aufstellung-display">`;
+                
+                if (aufstMF1) {
+                    const badge = istFuerAlleFreigegeben(aufstMF1) ? `<span class="visibility-badge badge-public">Freigegeben</span>` : `<span class="visibility-badge badge-locked">Intern</span>`;
+                    aufstellungHtml += `<div><strong>Planung MF1:</strong> ${formatAufstellungString(aufstMF1.einzel1, aufstMF1.doppel, aufstMF1.einzel2)} ${badge}</div>`;
+                } else {
+                    aufstellungHtml += `<div><strong>Planung MF1:</strong> <i>Noch keine Liste erstellt</i></div>`;
+                }
+
+                if (aufstMF2) {
+                    const badge = istFuerAlleFreigegeben(aufstMF2) ? `<span class="visibility-badge badge-public">Freigegeben</span>` : `<span class="visibility-badge badge-locked">Intern</span>`;
+                    aufstellungHtml += `<div><strong>Planung MF2:</strong> ${formatAufstellungString(aufstMF2.einzel1, aufstMF2.doppel, aufstMF2.einzel2)} ${badge}</div>`;
+                } else {
+                    aufstellungHtml += `<div><strong>Planung MF2:</strong> <i>Noch keine Liste erstellt</i></div>`;
+                }
+                
+                aufstellungHtml += `</div>`;
+            }
+        } else {
+            let zeigeMF1 = istFuerAlleFreigegeben(aufstMF1);
+            let zeigeMF2 = istFuerAlleFreigegeben(aufstMF2);
+
+            if (zeigeMF1 || zeigeMF2) {
+                aufstellungHtml = `<div class="aufstellung-display">`;
+                if (zeigeMF1) {
+                    aufstellungHtml += `<div><strong>Aufstellung (MF1):</strong> ${formatAufstellungString(aufstMF1.einzel1, aufstMF1.doppel, aufstMF1.einzel2)}</div>`;
+                }
+                if (zeigeMF2) {
+                    aufstellungHtml += `<div><strong>Aufstellung (MF2):</strong> ${formatAufstellungString(aufstMF2.einzel1, aufstMF2.doppel, aufstMF2.einzel2)}</div>`;
+                }
+                aufstellungHtml += `</div>`;
+            }
+        }
+
+        let actionContent = `
+            <div class="action-row">
+                <button class="app-btn ${isYes ? 'active-yes' : ''}" onclick="updateStatus(${m.id}, 'yes')">Zusage</button>
+                <button class="app-btn ${isNo ? 'active-no' : ''}" onclick="updateStatus(${m.id}, 'no')">Absage</button>
+            </div>
+        `;
+
+        if (hatMFRolle) {
+            actionContent += `
+                <div class="action-row">
+                    <button class="app-btn mf-btn" onclick="openAufstellungModal(${m.id}, '${aktuelleRolle}')"><i class="fa-solid fa-clipboard-list"></i> Eigene Liste bearbeiten</button>
+                </div>
+            `;
+        }
+
+        if (m.ergebnis && m.ergebnis !== "") {
+            actionContent = `
+                <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; font-family: 'Poppins'; color: var(--white); letter-spacing: 1px;">
+                    ENDERGEBNIS: <span style="color: var(--gold); font-size: 16px; margin-left: 5px;">${m.ergebnis}</span>
+                </div>
+            `;
+        }
+
+        card.innerHTML = `
+            <span class="game-loc-badge ${badgeClass}">${badgeText}</span>
+            <h4>Spieltag ${m.id}</h4>
+            <div class="match-title">vs. ${m.gegner || 'TBA'}</div>
+            <div class="match-date"><i class="fa-regular fa-clock"></i> ${formatGermanDate(m.datum)} - ${m.uhrzeit} Uhr</div>
+            ${adresseHtml}
+            <div class="match-status" style="margin-top: 15px;">
+                <span class="status-yes"><strong>Dabei (${m.zusagen.length}):</strong> ${m.zusagen.length > 0 ? formattedZusagen.join(', ') : '<i>Keine Zusagen</i>'}</span>
+                <span class="status-no"><strong>Absagen (${m.absagen.length}):</strong> ${m.absagen.length > 0 ? formattedAbsagen.join(', ') : '<i>Keine Absagen</i>'}</span>
+            </div>
+            ${aufstellungHtml}
+            <div style="margin-top:12px;">${actionContent}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function openAufstellungModal(matchId, rolle) {
+    activeMatchId = matchId;
+    document.getElementById('modal-title').innerText = `Aufstellung Spieltag ${matchId} (${rolle})`;
+    document.getElementById('btn-save-aufstellung').setAttribute('onclick', `saveAufstellungData('${rolle}')`);
+    
+    const tbody = document.getElementById('modal-table-body');
+    tbody.innerHTML = '';
+
+    const bestehendeAufst = globalAufstellungen.find(a => a.id == matchId && a.rolle === rolle);
+    const e1Set = bestehendeAufst ? bestehendeAufst.einzel1 : [];
+    const dRaw = bestehendeAufst ? bestehendeAufst.doppel : [];
+    const e2Set = bestehendeAufst ? bestehendeAufst.einzel2 : [];
+    
+    const istFreigegeben = bestehendeAufst ? (bestehendeAufst.freigegeben === true || bestehendeAufst.freigegeben === "true") : false;
+    document.getElementById('chk-public-visibility').checked = istFreigegeben;
+
+    kaderSpielerListe.forEach(spieler => {
+        const tr = document.createElement('tr');
+        const chkE1 = e1Set.includes(spieler) ? 'checked' : '';
+        const chkE2 = e2Set.includes(spieler) ? 'checked' : '';
+
+        // Finde heraus, in welchem Doppel-Paar der Spieler war (falls überhaupt)
+        let gewaehltesDoppel = "-";
+        dRaw.forEach(pairStr => {
+            if (pairStr.includes(spieler)) {
+                if (pairStr.includes("(D1)")) gewaehltesDoppel = "1";
+                if (pairStr.includes("(D2)")) gewaehltesDoppel = "2";
+                if (pairStr.includes("(D3)")) gewaehltesDoppel = "3";
+                if (pairStr.includes("(D4)")) gewaehltesDoppel = "4";
+            }
+        });
+
+        tr.innerHTML = `
+            <td>${spieler}</td>
+            <td><input type="checkbox" class="chk-e1" data-spieler="${spieler}" ${chkE1}></td>
+            <td>
+                <select class="sel-d" data-spieler="${spieler}">
+                    <option value="-" ${gewaehltesDoppel === "-" ? "selected" : ""}>-</option>
+                    <option value="1" ${gewaehltesDoppel === "1" ? "selected" : ""}>Paar 1</option>
+                    <option value="2" ${gewaehltesDoppel === "2" ? "selected" : ""}>Paar 2</option>
+                    <option value="3" ${gewaehltesDoppel === "3" ? "selected" : ""}>Paar 3</option>
+                    <option value="4" ${gewaehltesDoppel === "4" ? "selected" : ""}>Paar 4</option>
+                </select>
+            </td>
+            <td><input type="checkbox" class="chk-e2" data-spieler="${spieler}" ${chkE2}></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('aufstellung-modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('aufstellung-modal').style.display = 'none';
+}
+
+async function saveAufstellungData(rolle) {
+    const btn = document.getElementById('btn-save-aufstellung');
+    btn.innerText = "Wird gespeichert...";
+    btn.disabled = true;
+
+    const einzel1 = [];
+    const doppelGruppen = { "1": [], "2": [], "3": [], "4": [] };
+    const einzel2 = [];
+    const freigegeben = document.getElementById('chk-public-visibility').checked;
+
+    document.querySelectorAll('.chk-e1:checked').forEach(el => einzel1.push(el.getAttribute('data-spieler')));
+    document.querySelectorAll('.chk-e2:checked').forEach(el => einzel2.push(el.getAttribute('data-spieler')));
+    
+    // Doppel-Auswahlen sammeln und gruppieren
+    document.querySelectorAll('.sel-d').forEach(el => {
+        const spieler = el.getAttribute('data-spieler');
+        const val = el.value;
+        if (val !== "-") {
+            doppelGruppen[val].push(spieler);
+        }
+    });
+
+    // Mache aus den Gruppen lesbare Pärchen wie "SpielerA + SpielerB (D1)"
+    const doppelPayload = [];
+    for (let nr in doppelGruppen) {
+        if (doppelGruppen[nr].length > 0) {
+            doppelPayload.push(`${doppelGruppen[nr].join(' + ')} (D${nr})`);
+        }
+    }
+
+    const payload = {
+        action: "saveAufstellung",
+        id: activeMatchId,
+        rolle: rolle,
+        einzel1: einzel1,
+        doppel: doppelPayload, // Schickt die formatierten Pärchen ans Sheet
+        einzel2: einzel2,
+        freigegeben: freigegeben
+    };
+
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    setTimeout(() => {
+        closeModal();
+        btn.innerText = "Speichern";
+        btn.disabled = false;
+        initApp();
+    }, 500);
+}
+
+function renderKaderAndPersonalCard(stats, container) {
+    container.innerHTML = '';
+    const personalContainer = document.getElementById('personal-card-container');
+    personalContainer.innerHTML = '';
+    personalContainer.style.display = 'none';
+
+    const cleanCurrentUser = currentUser.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
+
+    stats.forEach((p, index) => {
+        const row = document.createElement('div');
+        row.className = 'kader-row';
+        
+        const highlightsText = p.highlights ? `
+            <div style="
+                margin-top: 12px; 
+                padding: 10px 15px; 
+                background-color: rgba(12, 22, 38, 0.6); 
+                border: 1px solid var(--gold); 
+                border-radius: 6px; 
+                font-size: 12px; 
+                color: var(--text-main);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            ">
+                <i class="fa-solid fa-star" style="color: var(--gold); font-size: 14px;"></i>
+                <strong style="color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px;">Highlights:</strong> 
+                <span>${p.highlights}</span>
+            </div>` : '';
+
+        row.innerHTML = `
+            <div style="width: 100%;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div class="kader-left">
+                        <div class="kader-rank">#${index + 1}</div>
+                        <div></div>
+                    </div>
+                    <div class="kader-details">
+                        <div class="kader-stat-entry"><span class="val" style="color:var(--gold);">${p.quote.toFixed(2)}%</span><span class="lbl">Quote</span></div>
+                        <div class="kader-stat-entry"><span class="val">${p.avg.toFixed(2)}</span><span class="lbl">AVG</span></div>
+                        <div class="kader-stat-entry"><span class="val">${p.spiele}</span><span class="lbl">Spiele</span></div>
+                        <div class="kader-stat-entry"><span class="val" style="color:var(--zusage);">${p.gewonnen}</span><span class="lbl">G</span></div>
+                        <div class="kader-stat-entry"><span class="val" style="color:var(--absage);">${p.verloren}</span><span class="lbl">V</span></div>
+                    </div>
+                </div>
+                ${highlightsText}
+            </div>
+        `;
+        row.querySelector('.kader-left > div:last-child').innerHTML = formatPlayerName(p.spieler);
+        container.appendChild(row);
+
+        if (p.spieler.toLowerCase() === cleanCurrentUser.toLowerCase()) {
+            personalContainer.style.display = 'block';
+            personalContainer.innerHTML = `
+                <div class="personal-card">
+                    <div>
+                        <p style="color: var(--gold); font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">DEINE LIVE PERFORMANCE</p>
+                        <h3 style="font-size: 24px; margin-bottom: 5px;">Hallo, ${p.spieler}!</h3>
+                        <p style="font-size: 13px;"><i class="fa-solid fa-star" style="color:var(--gold);"></i> Highlights: ${p.highlights || 'Keine Einträge'}</p>
+                    </div>
+                    <div class="personal-stats-grid">
+                        <div class="stat-box" style="border-left-color: var(--gold);"><div class="stat-val" style="color: var(--gold);">${p.quote.toFixed(2)}%</div><div class="stat-lbl">Match-Score</div></div>
+                        <div class="stat-box"><div class="stat-val">${p.avg.toFixed(2)}</div><div class="stat-lbl">Saison AVG</div></div>
+                        <div class="stat-box"><div class="stat-val">${p.matches || p.spiele}</div><div class="stat-lbl">Matches</div></div>
+                        <div class="stat-box"><div class="stat-val" style="color:var(--zusage);">${p.gewonnen}</div><div class="stat-lbl">Siege</div></div>
+                        <div class="stat-box"><div class="stat-val" style="color:var(--absage);">${p.verloren}</div><div class="stat-lbl">Niederl.</div></div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+}
+
+function renderLigaTable(ligaData, container) {
+    container.innerHTML = '';
+    if (!ligaData || ligaData.length === 0) {
+        container.innerHTML = '<tr><td colspan="9" style="text-align:center;">Keine Liga-Daten vorhanden.</td></tr>';
+        return;
+    }
+
+    ligaData.forEach(row => {
+        const tr = document.createElement('tr');
+        if (row.team.trim() === 'TV Kapellen 1919 e.V. 3') {
+            tr.className = 'own-team';
+        }
+        tr.innerHTML = `
+            <td style="text-align: center; font-weight: bold;">${row.platz}</td>
+            <td>${row.team}</td>
+            <td style="text-align: center;">${row.spiele}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--zusage);">${row.sieg}</td>
+            <td style="text-align: center;">${row.unentschieden}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--absage);">${row.niederlage}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--gold);">${row.punkte}</td>
+            <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.sets}</td>
+            <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${row.legs}</td>
+        `;
+        container.appendChild(tr);
+    });
+}
+
+function renderDoppelTable(doppelData, container) {
+    container.innerHTML = '';
+    if (!doppelData || doppelData.length === 0) {
+        container.innerHTML = '<tr><td colspan="5" style="text-align:center;">Keine Doppel-Daten vorhanden.</td></tr>';
+        return;
+    }
+    doppelData.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${formatPlayerName(row.spieler1)}</td>
+            <td>${formatPlayerName(row.spieler2)}</td>
+            <td style="text-align: center;">${row.spiele}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--zusage);">${row.siege}</td>
+            <td style="text-align: center; font-weight: bold; color: var(--absage);">${row.niederlagen}</td>
+        `;
+        container.appendChild(tr);
+    });
+}
+
+async function updateStatus(matchId, status) {
+    await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: matchId, spieler: currentUser, status: status })
+    });
+    setTimeout(initApp, 400);
+}
+
+if(currentUser) initApp();
+</script>
+
+</body>
+</html>
