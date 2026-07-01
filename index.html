@@ -666,6 +666,23 @@ function saveTraining() {
         });
     }
 
+    // --- HIER FEHLTE DER REST IN DEINEM SCHNIPSEL ---
+    localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
+    
+    // Damit sich die Anzeige sofort aktualisiert:
+    renderTrainingstage(); 
+    
+    alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr gespeichert!`);
+}
+
+    localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
+    
+    // Mit diesem Aufruf aktualisiert sich die Anzeige sofort nach dem Speichern
+    renderTrainingstage(); 
+    
+    alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr erfolgreich gespeichert!`);
+}
+
     localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
     renderTrainingstage();
     alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr erfolgreich gespeichert!`);
@@ -676,12 +693,17 @@ function removeTraining() {
     const wocheDaten = getTrainingsWocheDaten();
     const zielDatum = wocheDaten[gewaehlterTag];
     
+    // Den Eintrag aus dem Array entfernen
     const gefilterteDaten = trainingsDaten.filter(e => !(e.spieler === currentUser && e.datum === zielDatum));
     
-    if (filtriertEintragGefunden(trainingsDaten, zielDatum)) {
+    // Prüfen, ob wirklich etwas gelöscht wurde
+    if (trainingsDaten.length !== gefilterteDaten.length) {
         trainingsDaten = gefilterteDaten;
         localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
+        
+        // HIER: Damit die Liste sofort nach dem Austragen verschwindet:
         renderTrainingstage();
+        
         alert(`Du hast dich erfolgreich für ${gewaehlterTag} (${zielDatum}) ausgetragen.`);
     } else {
         alert(`Für ${gewaehlterTag} gab es gar keinen Eintrag von dir.`);
