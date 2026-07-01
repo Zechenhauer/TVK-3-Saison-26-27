@@ -644,7 +644,6 @@ function saveTraining() {
     const gewaehlterTag = document.getElementById('training-day-select').value;
     const uhrzeitInput = document.getElementById('training-time').value;
     
-    // Falls das Uhrzeit-Feld geleert wurde, als Austragung werten
     if (!uhrzeitInput || uhrzeitInput === "") {
         removeTraining();
         return;
@@ -666,28 +665,27 @@ function saveTraining() {
         });
     }
 
-    // --- HIER FEHLTE DER REST IN DEINEM SCHNIPSEL ---
-    localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
-    
-    // Damit sich die Anzeige sofort aktualisiert:
-    renderTrainingstage(); 
-    
-    alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr gespeichert!`);
-}
-
-    localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
-    
-    // Mit diesem Aufruf aktualisiert sich die Anzeige sofort nach dem Speichern
-    renderTrainingstage(); 
-    
-    alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr erfolgreich gespeichert!`);
-}
-
     localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
     renderTrainingstage();
     alert(`Eintrag für ${gewaehlterTag} (${zielDatum}) um ${uhrzeitInput} Uhr erfolgreich gespeichert!`);
 }
 
+function removeTraining() {
+    const gewaehlterTag = document.getElementById('training-day-select').value;
+    const wocheDaten = getTrainingsWocheDaten();
+    const zielDatum = wocheDaten[gewaehlterTag];
+    
+    const gefilterteDaten = trainingsDaten.filter(e => !(e.spieler === currentUser && e.datum === zielDatum));
+    
+    if (trainingsDaten.length !== gefilterteDaten.length) {
+        trainingsDaten = gefilterteDaten;
+        localStorage.setItem('tvk3_training_v2', JSON.stringify(trainingsDaten));
+        renderTrainingstage();
+        alert(`Du hast dich erfolgreich für ${gewaehlterTag} (${zielDatum}) ausgetragen.`);
+    } else {
+        alert(`Für ${gewaehlterTag} gab es gar keinen Eintrag von dir.`);
+    }
+}
 function removeTraining() {
     const gewaehlterTag = document.getElementById('training-day-select').value;
     const wocheDaten = getTrainingsWocheDaten();
