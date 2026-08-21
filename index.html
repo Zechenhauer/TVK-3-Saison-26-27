@@ -12,7 +12,7 @@
     <link rel="icon" sizes="192x192" href="https://drive.google.com/uc?id=1PB4X2QrrMlaRlajQEWDtJxRP2c6VTsI5">
     
     <style>
-/* 1. GLOBAL THEME & RESPONSIVE SETUP */
+/* GLOBAL THEME & RESPONSIVE SETUP */
 :root {
   --navy: #050a14;
   --gold: #D4AF37;
@@ -186,6 +186,21 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 </head>
 <body>
 
+<!-- VERSTECKTES VERBINDUNGS-FORMULAR -->
+<iframe name="hidden_target_frame" id="hidden_target_frame" style="display:none;"></iframe>
+<form id="global-backend-form" action="https://script.google.com/macros/s/AKfycbwDn_d9o-RWGVFUENrs3ZubfFHPvo2SSKzy0bY0uw4avjngv9l0zgfVDop5cfcm6AgKHg/exec" method="POST" target="hidden_target_frame" style="display:none;">
+    <input type="hidden" name="action" id="f_action">
+    <input type="hidden" name="spieler" id="f_spieler">
+    <input type="hidden" name="text" id="f_text">
+    <input type="hidden" name="id" id="f_id">
+    <input type="hidden" name="status" id="f_status">
+    <input type="hidden" name="rolle" id="f_rolle">
+    <input type="hidden" name="einzel1" id="f_einzel1">
+    <input type="hidden" name="doppel" id="f_doppel">
+    <input type="hidden" name="einzel2" id="f_einzel2">
+    <input type="hidden" name="freigegeben" id="f_freigegeben">
+</form>
+
 <div class="slide-container" id="slide1">
     <div class="title-layout">
         <p style="color: var(--gold); letter-spacing: 3px; font-weight: 700; font-size: 14px;">PREMIUM SQUAD MANAGEMENT</p>
@@ -258,37 +273,12 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 
     <!-- Container im 2er-Raster -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        
-        <!-- Link 1 -->
-        <a href="https://zechenhauer.github.io/saison26-27/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Saison 26/27
-        </a>
-        
-        <!-- Link 2 -->
-        <a href="https://zechenhauer.github.io/Orga-Saison-26-27/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Orga & Training
-        </a>
-        
-        <!-- Link 3 -->
-        <a href="https://zechenhauer.github.io/Spielerkarten-Alle-Liga-Spieler/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Digitale Spielerkarte
-        </a>
-
-        <!-- Link 4 -->
-        <a href="https://zechenhauer.github.io/Spieler_Vereinsranking/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Vereins Ranking Einzel u. Doppel
-        </a>
-
-        <!-- Link 5 -->
-        <a href="https://zechenhauer.github.io/TVK-Tabellen/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Tabellen aller Teams
-        </a>
-
-        <!-- Link 6 -->
-        <a href="https://zechenhauer.github.io/dart_spielplaner/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">
-            🔗 App / Spieltage aller Teams
-        </a>
-
+        <a href="https://zechenhauer.github.io/saison26-27/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Saison 26/27</a>
+        <a href="https://zechenhauer.github.io/Orga-Saison-26-27/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Orga & Training</a>
+        <a href="https://zechenhauer.github.io/Spielerkarten-Alle-Liga-Spieler/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Digitale Spielerkarte</a>
+        <a href="https://zechenhauer.github.io/Spieler_Vereinsranking/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Vereins Ranking Einzel u. Doppel</a>
+        <a href="https://zechenhauer.github.io/TVK-Tabellen/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Tabellen aller Teams</a>
+        <a href="https://zechenhauer.github.io/dart_spielplaner/" target="_blank" style="display: flex; align-items: center; justify-content: center; padding: 10px 8px; background-color: var(--gold); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; box-sizing: border-box;">🔗 App / Spieltage aller Teams</a>
     </div>
 </div>
 </div>
@@ -414,7 +404,6 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
 <script>
 let currentUser = localStorage.getItem('tvk3_user_26_27_mobile');
 
-// AKTUELLSTE GOOGLE APPS SCRIPT URL
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDn_d9o-RWGVFUENrs3ZubfFHPvo2SSKzy0bY0uw4avjngv9l0zgfVDop5cfcm6AgKHg/exec';
 
 const kaderSpielerListe = [
@@ -431,39 +420,25 @@ const mfPasswords = {
 let activeMatchId = null;
 let globalAufstellungen = [];
 
-// Hilfsfunktion: Namenszusätze sicher entfernen
 function getCleanName(name) {
     if (!name) return "";
     return name.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
 }
 
-// Hilfsfunktion zum bombensicheren Absenden via Formular-POST in Iframe
-function postForm(params) {
-    let iframe = document.getElementById('hidden_iframe');
-    if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.name = 'hidden_iframe';
-        iframe.id = 'hidden_iframe';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-    }
+// BOMBENSICHERE FORMULAR-POST METHODE
+function submitData(params) {
+    document.getElementById('f_action').value = params.action || "";
+    document.getElementById('f_spieler').value = params.spieler || "";
+    document.getElementById('f_text').value = params.text || "";
+    document.getElementById('f_id').value = params.id || "";
+    document.getElementById('f_status').value = params.status || "";
+    document.getElementById('f_rolle').value = params.rolle || "";
+    document.getElementById('f_einzel1').value = params.einzel1 || "";
+    document.getElementById('f_doppel').value = params.doppel || "";
+    document.getElementById('f_einzel2').value = params.einzel2 || "";
+    document.getElementById('f_freigegeben').value = params.freigegeben || "";
 
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = GOOGLE_SCRIPT_URL;
-    form.target = 'hidden_iframe';
-
-    for (const key in params) {
-        const hiddenField = document.createElement('input');
-        hiddenField.type = 'hidden';
-        hiddenField.name = key;
-        hiddenField.value = params[key];
-        form.appendChild(hiddenField);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+    document.getElementById('global-backend-form').submit();
 }
 
 function togglePasswordInput() {
@@ -580,10 +555,6 @@ async function initApp() {
         
     } catch (err) {
         console.error("Init Fehler:", err);
-        matchContainer.innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
-        kaderContainer.innerHTML = '<p style="text-align:center; color:red;">Verbindungsfehler!</p>';
-        document.getElementById('doppel-table-body').innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Verbindungsfehler!</td></tr>';
-        document.getElementById('chat-messages-target').innerHTML = '<p style="text-align:center; color:red; padding-top:20px;">Verbindungsfehler!</p>';
     }
 }
 
@@ -622,18 +593,15 @@ function sendChatMessage() {
     input.value = '';
     const cleanUser = getCleanName(currentUser);
     
-    postForm({
+    submitData({
         action: "sendChatMessage",
         spieler: cleanUser,
         text: text
     });
     
-    setTimeout(initApp, 1200);
+    setTimeout(initApp, 1500);
 }
 
-// -------------------------------------------------------------
-// REIN INTERNER CHAT ZWISCHEN JÜRGEN & MARKUS
-// -------------------------------------------------------------
 function renderMfChat(mfChatMsgs, container) {
     if (!container) return;
     container.innerHTML = '';
@@ -681,7 +649,7 @@ function sendMfChatMessage() {
     let rawUser = currentUser || localStorage.getItem('tvk3_user_26_27_mobile') || "Jürgen Schützendorf";
     const cleanUser = getCleanName(rawUser);
 
-    postForm({
+    submitData({
         action: "sendMfChatMessage",
         spieler: cleanUser,
         text: text
@@ -690,9 +658,8 @@ function sendMfChatMessage() {
     setTimeout(() => {
         if(btn) btn.innerText = "SENDEN";
         initApp();
-    }, 1200);
+    }, 1500);
 }
-// -------------------------------------------------------------
 
 function formatAufstellungString(einzel1, doppel, einzel2) {
     let parts = [];
@@ -964,7 +931,7 @@ function saveAufstellungData(rolle) {
         if (dG[nr].length > 0) dPayload.push(`${dG[nr].join(' + ')} (D${nr})`);
     }
 
-    postForm({
+    submitData({
         action: "saveAufstellung",
         id: activeMatchId,
         rolle: rolle,
@@ -979,7 +946,7 @@ function saveAufstellungData(rolle) {
         btn.innerText = "Speichern";
         btn.disabled = false;
         initApp();
-    }, 1200);
+    }, 1500);
 }
 
 function renderKaderAndPersonalCard(stats, container) {
@@ -1045,13 +1012,13 @@ function renderDoppelTable(doppelData, container) {
 
 function updateStatus(matchId, status) {
     const cleanUser = getCleanName(currentUser);
-    postForm({
+    submitData({
         action: "updateStatus",
         id: matchId,
         spieler: cleanUser,
         status: status
     });
-    setTimeout(initApp, 1200);
+    setTimeout(initApp, 1500);
 }
 
 if(currentUser) {
