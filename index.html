@@ -437,6 +437,35 @@ function getCleanName(name) {
     return name.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
 }
 
+// Hilfsfunktion zum bombensicheren Absenden via Formular-POST in Iframe
+function postForm(params) {
+    let iframe = document.getElementById('hidden_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = 'hidden_iframe';
+        iframe.id = 'hidden_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+    }
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GOOGLE_SCRIPT_URL;
+    form.target = 'hidden_iframe';
+
+    for (const key in params) {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = params[key];
+        form.appendChild(hiddenField);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 function togglePasswordInput() {
     const sel = document.getElementById('player-select').value;
     const passContainer = document.getElementById('password-container');
@@ -585,7 +614,7 @@ function renderChat(chatMsgs, container) {
     container.scrollTop = container.scrollHeight;
 }
 
-async function sendChatMessage() {
+function sendChatMessage() {
     const input = document.getElementById('chat-input-field');
     const text = input.value.trim();
     if(!text) return;
@@ -593,18 +622,13 @@ async function sendChatMessage() {
     input.value = '';
     const cleanUser = getCleanName(currentUser);
     
-    const formData = new URLSearchParams();
-    formData.append("action", "sendChatMessage");
-    formData.append("spieler", cleanUser);
-    formData.append("text", text);
-
-    await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString()
+    postForm({
+        action: "sendChatMessage",
+        spieler: cleanUser,
+        text: text
     });
     
-    setTimeout(initApp, 800);
+    setTimeout(initApp, 1200);
 }
 
 // -------------------------------------------------------------
@@ -645,7 +669,7 @@ function renderMfChat(mfChatMsgs, container) {
     container.scrollTop = container.scrollHeight;
 }
 
-async function sendMfChatMessage() {
+function sendMfChatMessage() {
     const input = document.getElementById('mf-chat-input-field');
     const btn = document.getElementById('btn-send-mf');
     const text = input.value.trim();
@@ -657,26 +681,16 @@ async function sendMfChatMessage() {
     let rawUser = currentUser || localStorage.getItem('tvk3_user_26_27_mobile') || "Jürgen Schützendorf";
     const cleanUser = getCleanName(rawUser);
 
-    const formData = new URLSearchParams();
-    formData.append("action", "sendMfChatMessage");
-    formData.append("spieler", cleanUser);
-    formData.append("text", text);
+    postForm({
+        action: "sendMfChatMessage",
+        spieler: cleanUser,
+        text: text
+    });
 
-    try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST', 
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData.toString()
-        });
-    } catch(e) {
-        console.error("Fehler beim Senden:", e);
-    }
-    
     setTimeout(() => {
         if(btn) btn.innerText = "SENDEN";
         initApp();
-    }, 1000);
+    }, 1200);
 }
 // -------------------------------------------------------------
 
@@ -908,7 +922,7 @@ function openAufstellungModal(matchId, rolle) {
     document.getElementById('aufstellung-modal').style.display = 'flex';
 }
 
-async function saveAufstellungData(rolle) {
+function saveAufstellungData(rolle) {
     const btn = document.getElementById('btn-save-aufstellung');
     btn.innerText = "Speichert...";
     btn.disabled = true;
@@ -950,18 +964,14 @@ async function saveAufstellungData(rolle) {
         if (dG[nr].length > 0) dPayload.push(`${dG[nr].join(' + ')} (D${nr})`);
     }
 
-    await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            action: "saveAufstellung",
-            id: activeMatchId,
-            rolle: rolle,
-            einzel1: e1Payload,
-            doppel: dPayload,
-            einzel2: e2Payload,
-            freigegeben: document.getElementById('chk-public-visibility').checked
-        })
+    postForm({
+        action: "saveAufstellung",
+        id: activeMatchId,
+        rolle: rolle,
+        einzel1: e1Payload.join(", "),
+        doppel: dPayload.join(", "),
+        einzel2: e2Payload.join(", "),
+        freigegeben: document.getElementById('chk-public-visibility').checked
     });
 
     setTimeout(() => {
@@ -969,7 +979,7 @@ async function saveAufstellungData(rolle) {
         btn.innerText = "Speichern";
         btn.disabled = false;
         initApp();
-    }, 800);
+    }, 1200);
 }
 
 function renderKaderAndPersonalCard(stats, container) {
@@ -1033,20 +1043,15 @@ function renderDoppelTable(doppelData, container) {
     });
 }
 
-async function updateStatus(matchId, status) {
+function updateStatus(matchId, status) {
     const cleanUser = getCleanName(currentUser);
-    const formData = new URLSearchParams();
-    formData.append("action", "updateStatus");
-    formData.append("id", matchId);
-    formData.append("spieler", cleanUser);
-    formData.append("status", status);
-
-    await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString()
+    postForm({
+        action: "updateStatus",
+        id: matchId,
+        spieler: cleanUser,
+        status: status
     });
-    setTimeout(initApp, 800);
+    setTimeout(initApp, 1200);
 }
 
 if(currentUser) {
