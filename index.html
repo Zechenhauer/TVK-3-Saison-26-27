@@ -12,7 +12,7 @@
     <link rel="icon" sizes="192x192" href="https://drive.google.com/uc?id=1PB4X2QrrMlaRlajQEWDtJxRP2c6VTsI5">
     
     <style>
-/* GLOBAL THEME & RESPONSIVE SETUP */
+/* 1. GLOBAL THEME & RESPONSIVE SETUP */
 :root {
   --navy: #050a14;
   --gold: #D4AF37;
@@ -185,21 +185,6 @@ p { font-size: clamp(14px, 4vw, 17px); color: var(--text-dim); }
     </style>
 </head>
 <body>
-
-<!-- VERSTECKTES VERBINDUNGS-FORMULAR -->
-<iframe name="hidden_target_frame" id="hidden_target_frame" style="display:none;"></iframe>
-<form id="global-backend-form" action="https://script.google.com/macros/s/AKfycbwDn_d9o-RWGVFUENrs3ZubfFHPvo2SSKzy0bY0uw4avjngv9l0zgfVDop5cfcm6AgKHg/exec" method="POST" target="hidden_target_frame" style="display:none;">
-    <input type="hidden" name="action" id="f_action">
-    <input type="hidden" name="spieler" id="f_spieler">
-    <input type="hidden" name="text" id="f_text">
-    <input type="hidden" name="id" id="f_id">
-    <input type="hidden" name="status" id="f_status">
-    <input type="hidden" name="rolle" id="f_rolle">
-    <input type="hidden" name="einzel1" id="f_einzel1">
-    <input type="hidden" name="doppel" id="f_doppel">
-    <input type="hidden" name="einzel2" id="f_einzel2">
-    <input type="hidden" name="freigegeben" id="f_freigegeben">
-</form>
 
 <div class="slide-container" id="slide1">
     <div class="title-layout">
@@ -425,22 +410,6 @@ function getCleanName(name) {
     return name.replace(' (TC 1)', '').replace(' (MF1)', '').replace(' (MF2)', '').trim();
 }
 
-// BOMBENSICHERE FORMULAR-POST METHODE
-function submitData(params) {
-    document.getElementById('f_action').value = params.action || "";
-    document.getElementById('f_spieler').value = params.spieler || "";
-    document.getElementById('f_text').value = params.text || "";
-    document.getElementById('f_id').value = params.id || "";
-    document.getElementById('f_status').value = params.status || "";
-    document.getElementById('f_rolle').value = params.rolle || "";
-    document.getElementById('f_einzel1').value = params.einzel1 || "";
-    document.getElementById('f_doppel').value = params.doppel || "";
-    document.getElementById('f_einzel2').value = params.einzel2 || "";
-    document.getElementById('f_freigegeben').value = params.freigegeben || "";
-
-    document.getElementById('global-backend-form').submit();
-}
-
 function togglePasswordInput() {
     const sel = document.getElementById('player-select').value;
     const passContainer = document.getElementById('password-container');
@@ -585,7 +554,7 @@ function renderChat(chatMsgs, container) {
     container.scrollTop = container.scrollHeight;
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
     const input = document.getElementById('chat-input-field');
     const text = input.value.trim();
     if(!text) return;
@@ -593,13 +562,20 @@ function sendChatMessage() {
     input.value = '';
     const cleanUser = getCleanName(currentUser);
     
-    submitData({
-        action: "sendChatMessage",
-        spieler: cleanUser,
-        text: text
-    });
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: "sendChatMessage",
+                spieler: cleanUser,
+                text: text
+            }).toString()
+        });
+    } catch(e) { console.error(e); }
     
-    setTimeout(initApp, 1500);
+    setTimeout(initApp, 1000);
 }
 
 function renderMfChat(mfChatMsgs, container) {
@@ -637,7 +613,7 @@ function renderMfChat(mfChatMsgs, container) {
     container.scrollTop = container.scrollHeight;
 }
 
-function sendMfChatMessage() {
+async function sendMfChatMessage() {
     const input = document.getElementById('mf-chat-input-field');
     const btn = document.getElementById('btn-send-mf');
     const text = input.value.trim();
@@ -649,16 +625,23 @@ function sendMfChatMessage() {
     let rawUser = currentUser || localStorage.getItem('tvk3_user_26_27_mobile') || "Jürgen Schützendorf";
     const cleanUser = getCleanName(rawUser);
 
-    submitData({
-        action: "sendMfChatMessage",
-        spieler: cleanUser,
-        text: text
-    });
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: "sendMfChatMessage",
+                spieler: cleanUser,
+                text: text
+            }).toString()
+        });
+    } catch(e) { console.error(e); }
 
     setTimeout(() => {
         if(btn) btn.innerText = "SENDEN";
         initApp();
-    }, 1500);
+    }, 1000);
 }
 
 function formatAufstellungString(einzel1, doppel, einzel2) {
@@ -889,7 +872,7 @@ function openAufstellungModal(matchId, rolle) {
     document.getElementById('aufstellung-modal').style.display = 'flex';
 }
 
-function saveAufstellungData(rolle) {
+async function saveAufstellungData(rolle) {
     const btn = document.getElementById('btn-save-aufstellung');
     btn.innerText = "Speichert...";
     btn.disabled = true;
@@ -931,22 +914,29 @@ function saveAufstellungData(rolle) {
         if (dG[nr].length > 0) dPayload.push(`${dG[nr].join(' + ')} (D${nr})`);
     }
 
-    submitData({
-        action: "saveAufstellung",
-        id: activeMatchId,
-        rolle: rolle,
-        einzel1: e1Payload.join(", "),
-        doppel: dPayload.join(", "),
-        einzel2: e2Payload.join(", "),
-        freigegeben: document.getElementById('chk-public-visibility').checked
-    });
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: "saveAufstellung",
+                id: activeMatchId,
+                rolle: rolle,
+                einzel1: e1Payload.join(", "),
+                doppel: dPayload.join(", "),
+                einzel2: e2Payload.join(", "),
+                freigegeben: document.getElementById('chk-public-visibility').checked
+            }).toString()
+        });
+    } catch(e) { console.error(e); }
 
     setTimeout(() => {
         closeModal();
         btn.innerText = "Speichern";
         btn.disabled = false;
         initApp();
-    }, 1500);
+    }, 1000);
 }
 
 function renderKaderAndPersonalCard(stats, container) {
@@ -1010,15 +1000,23 @@ function renderDoppelTable(doppelData, container) {
     });
 }
 
-function updateStatus(matchId, status) {
+async function updateStatus(matchId, status) {
     const cleanUser = getCleanName(currentUser);
-    submitData({
-        action: "updateStatus",
-        id: matchId,
-        spieler: cleanUser,
-        status: status
-    });
-    setTimeout(initApp, 1500);
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: "updateStatus",
+                id: matchId,
+                spieler: cleanUser,
+                status: status
+            }).toString()
+        });
+    } catch(e) { console.error(e); }
+    
+    setTimeout(initApp, 1000);
 }
 
 if(currentUser) {
